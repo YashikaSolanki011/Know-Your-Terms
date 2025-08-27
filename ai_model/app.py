@@ -1,20 +1,15 @@
 # app.py
-from flask import Flask, render_template, request, send_file
-import pdfplumber, docx, pytesseract, cv2, numpy as np, os, re, fitz
+from flask import Flask, render_template, request, send_file, jsonify
+import pdfplumber, docx, pytesseract, cv2, numpy as np, re, fitz, io
 from PIL import Image
-from werkzeug.utils import secure_filename
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from transformers import pipeline
-from flask import jsonify
 
 # ---------------------------
-# Initialize Flask & config
+# Initialize Flask
 # ---------------------------
 app = Flask(__name__)
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # ---------------------------
 # Model: Zero-shot classifier
@@ -26,13 +21,8 @@ classifier = pipeline(
 )
 
 POSITIVE_LABELS = [
-    "agreement",
-    "legal contract",
-    "rental agreement",
-    "lease agreement",
-    "service agreement",
-    "tenant-landlord agreement",
-    "terms and conditions"
+    "agreement", "legal contract", "rental agreement", "lease agreement",
+    "service agreement", "tenant-landlord agreement", "terms and conditions"
 ]
 
 SECTION_CUES = [
@@ -45,25 +35,18 @@ SECTION_CUES = [
 # Helpers
 # ---------------------------
 def safe_join_text(parts):
-    """Combine extracted text parts, ignoring None/empty."""
     return "\n".join([p for p in parts if p])
 
 def chunk_text(text, max_words=300):
-    """Split long text into smaller chunks for classification."""
     words = text.split()
     return [" ".join(words[i:i+max_words]) for i in range(0, len(words), max_words)]
 
 def heuristic_score(text):
-    """Heuristic: check if contract/agreements keywords appear."""
     t = (text or "").lower()
     found = sum(1 for k in SECTION_CUES if re.search(r"\b" + re.escape(k) + r"\b", t))
     return found / max(1, len(SECTION_CUES))
 
 def classify_agreement(text):
-    """
-    Run classification + heuristic checks.
-    Returns (bool, details dict).
-    """
     details = {
         "chunks": 0, "votes": 0, "vote_ratio": 0.0,
         "heuristic": 0.0, "avg_chunk_score": 0.0, "reason": ""
@@ -75,12 +58,9 @@ def classify_agreement(text):
 
     chunks = chunk_text(text, max_words=300)
     details["chunks"] = len(chunks)
-    if not chunks:
-        details["reason"] = "no_chunks"
-        return False, details
 
     votes, per_chunk_scores = 0, []
-    CHUNK_THRESHOLD = 0.5  # adjust if too strict/loose
+    CHUNK_THRESHOLD = 0.5
 
     for ch in chunks:
         try:
@@ -106,49 +86,41 @@ def classify_agreement(text):
         "avg_chunk_score": round(sum(per_chunk_scores) / max(1, len(per_chunk_scores)), 3)
     })
 
-    # Acceptance condition
     accept = (ratio >= 0.4) or (heur >= 0.4)
     if not accept:
         details["reason"] = "low_confidence"
     return accept, details
 
 # ---------------------------
-# Text Extractors
+# Text Extractors (in-memory)
 # ---------------------------
-def extract_pdf(filepath):
-    """Try pdfplumber first, then fallback to OCR."""
+def extract_pdf(file_stream):
     try:
-        with pdfplumber.open(filepath) as pdf:
+        with pdfplumber.open(file_stream) as pdf:
             return safe_join_text([p.extract_text() for p in pdf.pages])
     except Exception:
-        pass
+        try:
+            doc = fitz.open(stream=file_stream.read(), filetype="pdf")
+            texts = []
+            for p in doc:
+                pix = p.get_pixmap(dpi=200)
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                texts.append(pytesseract.image_to_string(img))
+            return "\n".join(texts)
+        except Exception:
+            return ""
 
-    # OCR fallback
+def extract_docx(file_stream):
     try:
-        doc = fitz.open(filepath)
-        texts = []
-        for p in doc:
-            pix = p.get_pixmap(dpi=200)
-            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-            texts.append(pytesseract.image_to_string(img))
-        return "\n".join(texts)
-    except Exception:
-        return ""
-
-def extract_docx(filepath):
-    try:
-        doc = docx.Document(filepath)
+        doc = docx.Document(io.BytesIO(file_stream.read()))
         return "\n".join(p.text for p in doc.paragraphs if p.text)
     except Exception:
         return ""
 
-def extract_image(filepath):
+def extract_image(file_stream):
     try:
-        img = cv2.imread(filepath)
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        scanned = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                        cv2.THRESH_BINARY, 31, 10)
-        return pytesseract.image_to_string(Image.fromarray(scanned))
+        img = Image.open(file_stream).convert("RGB")
+        return pytesseract.image_to_string(img)
     except Exception:
         return ""
 
@@ -167,21 +139,18 @@ def upload():
     if file.filename == "":
         return "No file selected", 400
 
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    file.save(filepath)
+    filename = file.filename.lower()
+    text = ""
 
-    # Choose extractor
-    if filename.lower().endswith(".pdf"):
-        text = extract_pdf(filepath)
-    elif filename.lower().endswith(".docx"):
-        text = extract_docx(filepath)
-    elif filename.lower().endswith((".png", ".jpg", ".jpeg")):
-        text = extract_image(filepath)
+    if filename.endswith(".pdf"):
+        text = extract_pdf(file.stream)
+    elif filename.endswith(".docx"):
+        text = extract_docx(file.stream)
+    elif filename.endswith((".png", ".jpg", ".jpeg")):
+        text = extract_image(file.stream)
     else:
         return "Unsupported file type", 400
 
-    # Classify
     is_ok, details = classify_agreement(text)
 
     if not is_ok:
@@ -192,8 +161,7 @@ def upload():
             f"avg_score={details['avg_chunk_score']}). Reason={details['reason']}"
         ), 400
 
-    return render_template("result.html", text=text, filename=filename)
-
+    return render_template("result.html", text=text, filename=file.filename)
 
 @app.route("/uploads", methods=["POST"])
 def api_upload():
@@ -203,41 +171,19 @@ def api_upload():
     if file.filename == "":
         return jsonify({"error": "No file selected"}), 400
 
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    file.save(filepath)
+    filename = file.filename.lower()
+    text = ""
 
-    # Choose extractor
-    if filename.lower().endswith(".pdf"):
-        text = extract_pdf(filepath)
-    elif filename.lower().endswith(".docx"):
-        text = extract_docx(filepath)
-    elif filename.lower().endswith((".png", ".jpg", ".jpeg")):
-        text = extract_image(filepath)
+    if filename.endswith(".pdf"):
+        text = extract_pdf(file.stream)
+    elif filename.endswith(".docx"):
+        text = extract_docx(file.stream)
+    elif filename.endswith((".png", ".jpg", ".jpeg")):
+        text = extract_image(file.stream)
     else:
         return jsonify({"error": "Unsupported file type"}), 400
 
-    # Classify
-    is_ok, details = classify_agreement(text)
-
-    # if not is_ok:
-    #     return jsonify({
-    #         "valid": False,
-    #         "filename": filename,
-    #         "reason": details["reason"],
-    #         "votes": details["votes"],
-    #         "chunks": details["chunks"],
-    #         "vote_ratio": details["vote_ratio"],
-    #         "heuristic": details["heuristic"],
-    #         "avg_score": details["avg_chunk_score"]
-    #     }), 400
-
-    return jsonify({
-        # "valid": True,
-        # "filename": filename,
-        "extracted_text": text
-        # "classification_details": details
-    })
+    return jsonify({"extracted_text": text})
 
 # ---------------------------
 # Export Endpoints
@@ -245,22 +191,24 @@ def api_upload():
 @app.route("/export/pdf", methods=["POST"])
 def export_pdf():
     text = request.form["text"]
-    output_path = os.path.join(app.config["UPLOAD_FOLDER"], "output.pdf")
-    doc = SimpleDocTemplate(output_path)
+    output = io.BytesIO()
+    doc = SimpleDocTemplate(output)
     styles = getSampleStyleSheet()
     story = [Paragraph(line, styles["Normal"]) for line in text.split("\n")]
     doc.build(story)
-    return send_file(output_path, as_attachment=True)
+    output.seek(0)
+    return send_file(output, as_attachment=True, download_name="output.pdf")
 
 @app.route("/export/docx", methods=["POST"])
 def export_docx():
     text = request.form["text"]
-    output_path = os.path.join(app.config["UPLOAD_FOLDER"], "output.docx")
+    output = io.BytesIO()
     d = docx.Document()
     for line in text.split("\n"):
         d.add_paragraph(line)
-    d.save(output_path)
-    return send_file(output_path, as_attachment=True)
+    d.save(output)
+    output.seek(0)
+    return send_file(output, as_attachment=True, download_name="output.docx")
 
 # ---------------------------
 if __name__ == "__main__":
