@@ -117,7 +117,7 @@ const Navbar = () => {
           />
         </div>
 
-        <a href="/about-us" className="text-base font-semibold hover:text-[#CDA047] transition">{t("About")}</a>
+        <a href="/about" className="text-base font-semibold hover:text-[#CDA047] transition">{t("About")}</a>
         {/* Solutions with Flicker-Free Dropdown & Animation */}
         <div
           className="relative"

@@ -1,265 +1,139 @@
-import React from 'react';
+import { motion } from "framer-motion";
+import { BookText, FileSearch, MessageCircle, ClipboardCheck, Brain, ArrowRight } from "lucide-react";
+import Card from "../../components/common/Card";
+import Button from "../../components/common/Button";
 
-const About: React.FC = () => {
+const features = [
+  {
+    title: "Summarization",
+    description:
+      "Automatically condense long legal documents into clear, digestible summaries that are easy to understand.",
+    icon: <BookText className="w-10 h-10 text-[#CDA047]" />,
+  },
+  {
+    title: "Process Detail",
+    description:
+      "Break down the detailed processes and clauses step by step, ensuring transparency for users.",
+    icon: <ClipboardCheck className="w-10 h-10 text-[#F6A507]" />,
+  },
+  {
+    title: "Case Study",
+    description:
+      "Provide real-world scenarios and examples that showcase how similar documents affect individuals and businesses.",
+    icon: <FileSearch className="w-10 h-10 text-[#CDA047]" />,
+  },
+  {
+    title: "Review Docs",
+    description:
+      "Upload and review your own documents with instant AI-powered analysis and simplified explanations.",
+    icon: <Brain className="w-10 h-10 text-[#F6A507]" />,
+  },
+  {
+    title: "Chatbot / Estimation",
+    description:
+      "Engage with an interactive chatbot to clarify doubts, get cost estimations, and receive tailored legal insights.",
+    icon: <MessageCircle className="w-10 h-10 text-[#CDA047]" />,
+  },
+];
+
+const AboutPage = () => {
   return (
-    <div className="bg-gradient-to-b from-slate-50 to-white">
-      {/* Government Header Banner */}
-      <div className="bg-gradient-to-r from-orange-500 via-white to-green-500 h-2"></div>
-      <div className="bg-blue-900 text-white py-2">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="text-sm font-medium">Government of India</div>
-            <div className="h-4 w-px bg-white/30"></div>
-            <div className="text-sm">Ministry of Statistics and Programme Implementation</div>
+    <div className="min-h-screen bg-gradient-to-br from-[#f8fafc] via-[#f3e9d2] to-[#fffbe6] py-28 px-4 md:px-20">
+      {/* Intro Section */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-5xl mx-auto text-center mb-16"
+      >
+        <div className="mb-6">
+          <div className="inline-block px-4 py-2 rounded-full bg-[#fffbe6] border border-[#CDA047] text-[#CDA047] font-semibold text-xs tracking-wide uppercase shadow-sm">
+            AI-Powered Legal Document Analysis
           </div>
-          <div className="text-sm font-medium">Digital India Initiative</div>
+        </div>
+        <h1 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6">
+          About Our Project
+        </h1>
+        <p className="text-lg font-body text-[#5c4a1a] leading-relaxed max-w-4xl mx-auto">
+          <strong>Generative AI for Demystifying Legal Documents</strong> is an AI-driven solution that simplifies complex legal documents into clear, accessible guidance—empowering individuals and businesses to make informed decisions with confidence.
+        </p>
+      </motion.div>
+
+      {/* Challenge Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-4xl mx-auto mb-16 bg-white shadow-xl rounded-2xl p-8 border border-[#f3e9d2]"
+      >
+        <h2 className="text-2xl font-heading font-semibold text-gray-900 mb-4">Challenge</h2>
+        <p className="text-gray-700 font-body leading-relaxed">
+          Legal documents like rental agreements, loan contracts, and terms of service are filled with jargon that is often incomprehensible to the average person. This creates an imbalance of knowledge, leaving individuals vulnerable to unfavorable terms and financial risks. We aim to bridge this gap by making legal language understandable for all.
+        </p>
+      </motion.div>
+
+      {/* Objective Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="max-w-4xl mx-auto mb-16 bg-white shadow-xl rounded-2xl p-8 border border-[#f3e9d2]"
+      >
+        <h2 className="text-2xl font-heading font-semibold text-gray-900 mb-4">Objective</h2>
+        <p className="text-gray-700 font-body leading-relaxed">
+          Our goal is to build a reliable, safe, and supportive AI-powered platform that offers legal document simplification using Google Cloud's generative AI. By providing summaries, clause explanations, and interactive Q&A, we empower users to protect themselves from legal and financial risks while making informed choices.
+        </p>
+      </motion.div>
+
+      {/* Features Section */}
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-heading font-bold text-center text-gray-900 mb-12">
+          What We Offer
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2, duration: 0.5 }}
+            >
+              <Card className="p-6 h-full flex flex-col items-center text-center shadow-xl hover:shadow-2xl transition duration-300 bg-white border border-[#f3e9d2] rounded-2xl">
+                <div className="mb-6 bg-[#fffbe6] p-4 rounded-full border border-[#CDA047] shadow-sm">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-heading font-semibold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </div>
 
-      {/* HERO */}
-      <section className="bg-gradient-to-br from-blue-50 via-indigo-50 to-slate-100 py-20 border-b border-blue-200">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-blue-100 border border-blue-200 rounded-full mb-8">
-            <span className="text-sm font-semibold tracking-widest uppercase text-blue-800">
-              About the Project
-            </span>
-          </div>
-          <h1 className="text-5xl font-bold text-blue-900 mb-6">
-            AI-enabled Semantic Search for NCO
-          </h1>
-          <p className="text-xl text-slate-700 max-w-4xl mx-auto leading-relaxed">
-            Revolutionizing the National Classification of Occupation with advanced AI and semantic search capabilities 
-            for enhanced government survey efficiency and data quality.
-          </p>
-          
-          {/* Key Stats */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-blue-200 shadow-lg">
-              <div className="text-3xl font-bold text-blue-900">3,600+</div>
-              <div className="text-sm text-slate-600 font-medium">NCO-2015 Codes</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-green-200 shadow-lg">
-              <div className="text-3xl font-bold text-green-700">99%+</div>
-              <div className="text-sm text-slate-600 font-medium">Classification Accuracy</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-purple-200 shadow-lg">
-              <div className="text-3xl font-bold text-purple-700">90%</div>
-              <div className="text-sm text-slate-600 font-medium">Time Reduction</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-orange-200 shadow-lg">
-              <div className="text-3xl font-bold text-orange-700">52</div>
-              <div className="text-sm text-slate-600 font-medium">Sector Coverage</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="max-w-7xl mx-auto px-4 py-20 space-y-24">
-        {/* Project Overview */}
-        <section className="relative">
-          <div className="bg-blue-100 border border-blue-200 rounded-3xl p-8 lg:p-12 text-gray-900 shadow-lg">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h3 className="text-3xl font-bold mb-6 text-blue-900">Project Overview</h3>
-                <div className="space-y-6 text-blue-800 leading-relaxed">
-                  <p className="text-lg">
-                    The National Classification of Occupation (NCO) is a standardized system for classifying occupations in India,
-                    meticulously aligned with the International Standard Classification of Occupations (ISCO-08). The current version, NCO-2015,
-                    encompasses detailed descriptions of 3,600+ civilian occupations across 52 sectors, structured through an
-                    sophisticated 8-digit hierarchical classification system.
-                  </p>
-                  <p className="text-lg">
-                    Our revolutionary AI-powered solution transforms the traditional keyword-based search paradigm into an intelligent semantic search
-                    ecosystem that comprehends context, synonyms, and complex job relationships, making occupation classification exponentially faster,
-                    more accurate, and infinitely scalable for nationwide deployment.
-                  </p>
-                </div>
-              </div>
-              <div className="relative">
-                <div className="bg-white border border-blue-200 rounded-2xl p-6 shadow-md">
-                  <div className="text-center mb-6">
-                    <div className="text-4xl mb-3">🧠</div>
-                    <h4 className="text-xl font-bold text-blue-900">AI Classification Engine</h4>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                      <span className="text-gray-700 font-medium">Processing Speed</span>
-                      <span className="text-green-600 font-bold">0.3s</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                      <span className="text-gray-700 font-medium">Accuracy Rate</span>
-                      <span className="text-green-600 font-bold">99.2%</span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                      <span className="text-gray-700 font-medium">Coverage</span>
-                      <span className="text-green-600 font-bold">100%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Key Features */}
-        <section>
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-green-100 border border-green-200 rounded-full mb-6">
-              <span className="text-sm font-semibold tracking-widest uppercase text-green-800">
-                Advanced Capabilities
-              </span>
-            </div>
-            <h3 className="text-4xl font-bold text-slate-900 mb-6">Comprehensive Feature Ecosystem</h3>
-            <p className="text-xl text-slate-700 max-w-4xl mx-auto">
-              Built with enterprise-grade technologies and government-standard security protocols.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { 
-                title: 'Semantic Search Intelligence', 
-                description: 'Advanced NLP and deep learning algorithms to understand job descriptions and find relevant NCO codes with confidence scores and contextual reasoning.', 
-                icon: '🧠',
-              },
-              { 
-                title: 'Automated Data Processing', 
-                description: 'Intelligent ingestion and indexing of NCO-2015 data with hierarchical structure preservation and real-time updates.', 
-                icon: '⚙️',
-              },
-              { 
-                title: 'Multi-language Support', 
-                description: 'Comprehensive support for Hindi, English, and regional languages to enable truly nationwide accessibility and adoption.', 
-                icon: '🌐',
-              },
-              { 
-                title: 'Administrative Dashboard', 
-                description: 'Comprehensive management panel for data updates, user management, system monitoring, and performance analytics.', 
-                icon: '📊',
-              },
-              { 
-                title: 'Enterprise API Integration', 
-                description: 'RESTful APIs with authentication and rate limiting for seamless integration with existing MoSPI survey applications.', 
-                icon: '🔗',
-              },
-              { 
-                title: 'Comprehensive Audit Trail', 
-                description: 'Complete logging of search history, manual overrides, system usage, and compliance tracking for full accountability.', 
-                icon: '📋',
-              },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="group relative overflow-hidden rounded-lg border border-gray-300 bg-white p-6 hover:shadow-md transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg shadow-sm mb-4 group-hover:bg-blue-700 transition-colors duration-300">
-                  <span className="text-xl">{feature.icon}</span>
-                </div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">{feature.title}</h4>
-                <p className="text-gray-600 leading-relaxed mb-4">{feature.description}</p>
-                
-                {/* Feature Status */}
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 font-medium">Status</span>
-                  <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
-                    ✅ Operational
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Expected Impact */}
-        <section>
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-orange-100 border border-orange-200 rounded-full mb-6">
-              <span className="text-sm font-semibold tracking-widest uppercase text-orange-800">
-                Transformational Impact
-              </span>
-            </div>
-            <h3 className="text-4xl font-bold text-slate-900 mb-6">Expected National Impact</h3>
-            <p className="text-xl text-slate-700 max-w-4xl mx-auto">
-              Revolutionizing government data collection and policy-making through intelligent automation.
-            </p>
-          </div>
-          
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { 
-                title: 'Enhanced Operational Efficiency', 
-                desc: 'Dramatically reduce manual effort for enumerators while significantly increasing classification accuracy across all government surveys and data collection initiatives.',
-                icon: '🚀',
-              },
-              { 
-                title: 'Superior Data Quality Standards', 
-                desc: 'Ensure consistent classification standards across all regions, leading to better policy planning, evidence-based governance, and informed decision-making.',
-                icon: '🎯',
-              },
-              { 
-                title: 'Significant Cost Optimization', 
-                desc: 'Minimize training time and resource allocation while accelerating survey preparation, data collection processes, and project deployment timelines.',
-                icon: '💰',
-              },
-              { 
-                title: 'Future-Ready Scalability', 
-                desc: 'Enable intelligent, automated systems for national classification tasks that can seamlessly adapt to evolving job markets and emerging occupations.',
-                icon: '📈',
-              },
-            ].map((impact) => (
-              <div key={impact.title} className="group relative overflow-hidden rounded-lg border border-gray-300 bg-white p-6 hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-600 text-white rounded-lg shadow-sm mb-4 group-hover:bg-gray-700 transition-colors duration-300">
-                  <span className="text-xl">{impact.icon}</span>
-                </div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">{impact.title}</h4>
-                <p className="text-gray-600 text-sm leading-relaxed">{impact.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Technology Stack */}
-        <section>
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-purple-100 border border-purple-200 rounded-full mb-6">
-              <span className="text-sm font-semibold tracking-widest uppercase text-purple-800">
-                Technology Foundation
-              </span>
-            </div>
-            <h3 className="text-4xl font-bold text-slate-900 mb-6">Enterprise-Grade Technology Stack</h3>
-            <p className="text-xl text-slate-700 max-w-4xl mx-auto">
-              Built on proven technologies with government-standard security and reliability protocols.
-            </p>
-          </div>
-          
-          <div className="bg-gray-100 border border-gray-200 rounded-3xl p-8 lg:p-12 text-gray-900 shadow-lg">
-
-            
-            <div className="mt-12 text-center">
-              <h4 className="text-2xl font-bold mb-4 text-gray-900">Government Compliance & Security</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-                  <div className="text-3xl mb-3">🔐</div>
-                  <div className="font-semibold mb-2 text-gray-900">Data Security</div>
-                  <div className="text-sm text-gray-600">End-to-end encryption and secure protocols</div>
-                </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-                  <div className="text-3xl mb-3">✅</div>
-                  <div className="font-semibold mb-2 text-gray-900">MoSPI Compliance</div>
-                  <div className="text-sm text-gray-600">Meets all ministry standards and requirements</div>
-                </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-                  <div className="text-3xl mb-3">🌐</div>
-                  <div className="font-semibold mb-2 text-gray-900">Scalable Infrastructure</div>
-                  <div className="text-sm text-gray-600">Cloud-native architecture for nationwide deployment</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+      {/* Call to Action Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="max-w-4xl mx-auto mt-20 text-center bg-gradient-to-r from-[#CDA047] to-[#F6A507] rounded-2xl p-8 shadow-xl"
+      >
+        <h2 className="text-3xl font-heading font-bold text-white mb-4">
+          Ready to Simplify Your Legal Documents?
+        </h2>
+        <p className="text-white/90 font-body text-lg mb-8 leading-relaxed">
+          Join thousands of users who are making informed decisions with AI-powered legal document analysis.
+        </p>
+        <Button className="bg-white text-[#CDA047] hover:bg-gray-100 font-bold px-8 py-3 rounded-full shadow-lg transition text-lg tracking-wide border-2 border-white inline-flex items-center gap-2">
+          <span className="text-[#CDA047]">Start Analyzing Documents</span>
+          <ArrowRight className="w-5 h-5 text-[#CDA047]" />
+        </Button>
+      </motion.div>
     </div>
   );
 };
 
-export default About;
+export default AboutPage;
