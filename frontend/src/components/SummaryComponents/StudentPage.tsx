@@ -56,7 +56,6 @@ const StudentPage: React.FC = () => {
         </p>
       </motion.div>
 
-
       {/* Main Content */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {/* Left: Docs Explain */}
