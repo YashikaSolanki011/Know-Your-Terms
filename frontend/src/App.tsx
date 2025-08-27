@@ -9,6 +9,10 @@ import Navbar from './layouts/Navbar';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import RoleSelection from './pages/dashboard/RoleSelection';
+import SummaryPage from './pages/dashboard/SummaryPage';
+import CitizenPage from './components/SummaryComponents/CitizenSummary';
+import StudentPage from './components/SummaryComponents/StudentPage';
+import BusinessPage from './components/SummaryComponents/BusinessPage';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { getCurrentUserAsync } from './store/authSlice';
@@ -50,6 +54,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/active" element={<div>frontend active</div>} />
             <Route path="/role-selection" element={<RoleSelection />} />
+            <Route path="/summary" element={<SummaryPage />} />
+            <Route path="/citizen" element={<CitizenPage />} />
+            <Route path="/student" element={<StudentPage />} />
+            <Route path="/business" element={<BusinessPage />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
