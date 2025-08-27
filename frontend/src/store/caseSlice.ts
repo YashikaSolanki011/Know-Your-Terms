@@ -3,14 +3,14 @@ import { toast } from 'react-toastify';
 import { agreementService } from '../services/agreementService';
 import type { AgreementProcess, AgreementSummary } from '../types';
 
-interface AgreementState {
+interface CaseState {
   agreementSummery: AgreementSummary | null;
   agreementProcess: AgreementProcess | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: AgreementState = {
+const initialState: CaseState = {
   agreementSummery: null,
   agreementProcess: null,
   loading: false,
