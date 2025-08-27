@@ -1,9 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Card from "../../components/common/Card";
 
+interface Clause {
+  title: string;
+  explanation: string;
+  example: string;
+  questionsToAsk: string[];
+}
+
+interface ApiData {
+  aiRawOutput: {
+    about: string;
+    clauses: Clause[];
+    keyLegalNotes: string[];
+    finalTips: string[];
+  };
+}
+
 const StudentPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'risk' | 'recommendation'>('risk');
+  const [data, setData] = useState<ApiData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://mocki.io/v1/4bf0d986-dc9e-422c-bbb7-93c9340284f9")
+      .then((res) => res.json())
+      .then((json) => {
+        setData(json.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data from API:", err);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div className="w-full px-6 py-28 bg-gradient-to-br from-[#f8fafc] via-[#f3e9d2] to-[#fffbe6]">
       {/* Header */}
@@ -17,10 +48,11 @@ const StudentPage: React.FC = () => {
           Student Dashboard
         </div>
         <h1 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-3">
-          Document Insights for Students
+          Internship Agreement Insights
         </h1>
         <p className="text-md md:text-lg font-body text-[#5c4a1a] leading-relaxed max-w-3xl mx-auto">
-          Get a clear explanation of your document along with risk score and AI-powered recommendations.
+          Understand your internship agreement with clear AI-powered
+          explanations, key notes, and practical tips.
         </p>
       </motion.div>
 
@@ -35,28 +67,69 @@ const StudentPage: React.FC = () => {
         >
           <Card
             variant="elevated"
-            className="h-[500px] p-6 flex flex-col border border-[#CDA047]/30 bg-[#fffbe6] shadow-md"
+            className="p-6 flex flex-col border border-[#CDA047]/30 bg-[#fffbe6] shadow-md"
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-[#CDA047]">
-                Docs Explain
+                Agreement Summary
               </h2>
               <div className="flex items-center gap-3 text-[#CDA047] text-sm">
                 <span className="cursor-pointer">🌐</span>
                 <span className="cursor-pointer">⧉</span>
               </div>
             </div>
-            <div className="flex-1 bg-[#fdf6e3] rounded-lg border border-[#CDA047]/20 p-4 text-sm text-gray-700 overflow-y-auto">
-              {/* Placeholder content */}
-              <p>
-                Upload and summarize your document to view an AI-generated plain
-                language explanation here.
-              </p>
+
+            <div className="flex-1 bg-[#fdf6e3] rounded-lg border border-[#CDA047]/20 p-4 text-sm text-gray-700 overflow-y-auto space-y-6">
+              {loading ? (
+                <p>Loading agreement...</p>
+              ) : data ? (
+                <>
+                  {/* About Section */}
+                  <div>
+                    <h3 className="text-md font-semibold text-[#b38a3e] mb-2">
+                      About
+                    </h3>
+                    <p>{data.aiRawOutput.about}</p>
+                  </div>
+
+                  {/* Clauses */}
+                  <div>
+                    <h3 className="text-md font-semibold text-[#b38a3e] mb-2">
+                      Key Clauses
+                    </h3>
+                    <div className="space-y-4">
+                      {data.aiRawOutput.clauses.map((clause, idx) => (
+                        <div
+                          key={idx}
+                          className="p-3 rounded-lg border border-[#CDA047]/20 bg-white shadow-sm"
+                        >
+                          <h4 className="font-semibold text-[#CDA047]">
+                            {clause.title}
+                          </h4>
+                          <p className="text-sm text-gray-700 mt-1">
+                            {clause.explanation}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-2 italic">
+                            Example: {clause.example}
+                          </p>
+                          <ul className="list-disc list-inside text-xs text-gray-600 mt-2">
+                            {clause.questionsToAsk.map((q, i) => (
+                              <li key={i}>{q}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p>No agreement data available.</p>
+              )}
             </div>
           </Card>
         </motion.div>
 
-        {/* Right: Risk Score & Recommendations Tabbed Component */}
+        {/* Right: Notes & Tips */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -65,88 +138,39 @@ const StudentPage: React.FC = () => {
         >
           <Card
             variant="elevated"
-            className="h-[500px] p-4 border border-[#CDA047]/30 bg-[#fffbe6] shadow-md flex flex-col"
+            className="p-4 border border-[#CDA047]/30 bg-[#fffbe6] shadow-md flex flex-col"
           >
-            {/* Tab Headers */}
-            <div className="flex border-b border-[#CDA047]/20 mb-4">
-              <button
-                onClick={() => setActiveTab('risk')}
-                className={`flex-1 py-2 px-4 text-sm font-semibold transition-colors duration-200 ${
-                  activeTab === 'risk'
-                    ? 'text-[#CDA047] border-b-2 border-[#CDA047] bg-[#fdf6e3]'
-                    : 'text-gray-600 hover:text-[#CDA047]'
-                }`}
-              >
-                Risk Score
-              </button>
-              <button
-                onClick={() => setActiveTab('recommendation')}
-                className={`flex-1 py-2 px-4 text-sm font-semibold transition-colors duration-200 ${
-                  activeTab === 'recommendation'
-                    ? 'text-[#CDA047] border-b-2 border-[#CDA047] bg-[#fdf6e3]'
-                    : 'text-gray-600 hover:text-[#CDA047]'
-                }`}
-              >
-                Recommendation
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            <div className="flex-1 flex flex-col">
-              {activeTab === 'risk' ? (
-                <motion.div
-                  key="risk"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex-1 flex flex-col items-center justify-center"
-                >
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-[#CDA047] mb-4">
-                      Document Risk Assessment
-                    </h3>
-                    <div className="mb-4">
-                      <span className="text-6xl font-bold text-[#b38a3e]">--</span>
-                      <p className="text-sm text-gray-600 mt-2">
-                        Risk Level: Pending Analysis
-                      </p>
-                    </div>
-                    <div className="bg-[#fdf6e3] rounded-lg p-3 text-xs text-gray-700">
-                      Upload and analyze your document to see the risk assessment
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="recommendation"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex-1 flex flex-col"
-                >
-                  <h3 className="text-lg font-semibold text-[#CDA047] mb-4">
-                    AI Recommendations
+            {loading ? (
+              <p>Loading insights...</p>
+            ) : data ? (
+              <div className="flex flex-col flex-1 space-y-6 overflow-y-auto">
+                {/* Key Legal Notes */}
+                <div>
+                  <h3 className="text-lg font-semibold text-[#CDA047] mb-3">
+                    Key Legal Notes
                   </h3>
-                  <div className="flex-1 bg-[#fdf6e3] rounded-lg p-4 text-sm text-gray-700 leading-relaxed overflow-y-auto">
-                    <p>
-                      Once your document is analyzed, AI recommendations will be
-                      displayed here to guide your decision-making.
-                    </p>
-                    <div className="mt-4 space-y-2">
-                      <div className="text-xs text-gray-500">
-                        • Key risks identified
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        • Suggested actions
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        • Alternative options
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    {data.aiRawOutput.keyLegalNotes.map((note, idx) => (
+                      <li key={idx}>{note}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Final Tips */}
+                <div>
+                  <h3 className="text-lg font-semibold text-[#CDA047] mb-3">
+                    Final Tips
+                  </h3>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    {data.aiRawOutput.finalTips.map((tip, idx) => (
+                      <li key={idx}>{tip}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <p>No insights available.</p>
+            )}
           </Card>
         </motion.div>
       </div>
