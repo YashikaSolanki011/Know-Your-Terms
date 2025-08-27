@@ -226,17 +226,17 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
         }
 
         // Prepare agreement history object (store summary and aiRawOutput)
-        const docRef = db.collection('agreementHistory').doc();
-        const agreementHistory: AgreementHistory = {
-            id: docRef.id,
-            uid,
-            targetGroup: targetGroup,
-            processedAt: admin.firestore.Timestamp.now(),
-            summary: "",
-            aiRawOutput: geminiResponse,
-            language: language || 'en',
-        };
-        await docRef.set(agreementHistory);
+        // const docRef = db.collection('agreementHistory').doc();
+        // const agreementHistory: AgreementHistory = {
+        //     id: docRef.id,
+        //     uid,
+        //     targetGroup: targetGroup,
+        //     processedAt: admin.firestore.Timestamp.now(),
+        //     summary: "",
+        //     aiRawOutput: geminiResponse,
+        //     language: language || 'en',
+        // };
+        // await docRef.set(agreementHistory);
 
         await createAuditLog({
             uid,
@@ -247,7 +247,7 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
         });
 
         return res.status(200).json(
-            new ApiResponse(200, agreementHistory, 'Agreement summarized successfully')
+            new ApiResponse(200, geminiResponse, 'Agreement summarized successfully')
         );
     } catch (error: any) {
         await createAuditLog({
@@ -260,7 +260,6 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
         throw error;
     }
 });
-
 
 // agreemental process
 const processAgreement = asyncHandler(async (req: Request, res: Response) => {
@@ -291,22 +290,22 @@ const processAgreement = asyncHandler(async (req: Request, res: Response) => {
             throw new ApiError(500, 'Failed to process agreement with Gemini');
         }
 
-        // Prepare process history object
-        const docRef = db.collection('processHistory').doc();
-        const processHistory: ProcessHistory = {
-            id: docRef.id,
-            uid,
-            processType,
-            processedAt: admin.firestore.Timestamp.now(),
-            processSteps: geminiResponse.processSteps,
-            requiredDocuments: geminiResponse.requiredDocuments,
-            creationLinks: geminiResponse.creationLinks,
-            priceInfo: geminiResponse.priceInfo,
-            needExpert: geminiResponse.needExpert,
-            aiRawOutput: geminiResponse,
-            language: language || 'en',
-        };
-        await docRef.set(processHistory);
+        // // Prepare process history object
+        // const docRef = db.collection('processHistory').doc();
+        // const processHistory: ProcessHistory = {
+        //     id: docRef.id,
+        //     uid,
+        //     processType,
+        //     processedAt: admin.firestore.Timestamp.now(),
+        //     processSteps: geminiResponse.processSteps,
+        //     requiredDocuments: geminiResponse.requiredDocuments,
+        //     creationLinks: geminiResponse.creationLinks,
+        //     priceInfo: geminiResponse.priceInfo,
+        //     needExpert: geminiResponse.needExpert,
+        //     aiRawOutput: geminiResponse,
+        //     language: language || 'en',
+        // };
+        // await docRef.set(processHistory);
 
         // Audit log (success)
         await createAuditLog({
@@ -318,7 +317,7 @@ const processAgreement = asyncHandler(async (req: Request, res: Response) => {
         });
 
         return res.status(200).json(
-            new ApiResponse(200, processHistory, 'Agreement processed successfully')
+            new ApiResponse(200, geminiResponse, 'Agreement processed successfully')
         );
     } catch (error: any) {
         await createAuditLog({
