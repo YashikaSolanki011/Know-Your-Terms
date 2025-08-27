@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
+import agreementReducer from './agreementSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    agreement: agreementReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
