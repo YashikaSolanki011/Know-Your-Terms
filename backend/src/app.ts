@@ -8,6 +8,7 @@ import ApiResponse from "./utility/ApiResponse";
 import userRouter from './routes/user.router';
 import agreementRouter from "./routes/agreement.router";
 import adminRouter from "./routes/admin.router";
+import caseRouter from "./routes/case.routers";
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/agreements', agreementRouter);
 app.use('/api/v1/admins', adminRouter);
+app.use('/api/v1/cases', caseRouter);
 app.get("/api/v1/active", (req: Request, res: Response) => {
     res.status(200).json(
       new ApiResponse(200, "Platform active")
