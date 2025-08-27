@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classification Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f8f9fa;
+        }
+        h2 {
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            max-width: 900px;
+            height: 400px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        button {
+            margin-top: 15px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .export-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Extracted Content from: <u>{{ filename }}</u></h2>
+
+    {% if text %}
+    <!-- ✅ Text Extraction -->
+    <textarea readonly>{{ text }}</textarea>
+
+    <div class="export-section">
+        <form action="/export/pdf" method="post" style="display:inline;">
+            <input type="hidden" name="text" value="{{ text }}">
+            <button type="submit">Export as PDF</button>
+        </form>
+
+        <form action="/export/docx" method="post" style="display:inline;">
+            <input type="hidden" name="text" value="{{ text }}">
+            <button type="submit">Export as DOCX</button>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if image %}
+    <!-- ✅ Processed Image (OCR case) -->
+    <h3>Processed Image:</h3>
+    <img src="{{ url_for('static', filename='processed/' + image) }}" 
+         alt="Processed Image" style="max-width:600px; border:1px solid #ccc; border-radius:6px;">
+    <br><br>
+    <form action="/download/image" method="post">
+        <input type="hidden" name="image" value="{{ image }}">
+        <button type="submit">Download Processed Image</button>
+    </form>
+    {% endif %}
+
+    <br><a href="/">⬅ Back to Upload</a>
+</body>
+</html>
