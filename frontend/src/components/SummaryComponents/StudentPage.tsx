@@ -30,7 +30,7 @@ const StudentPage: React.FC = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching data from API:", err);
         setLoading(false);
       });
   }, []);
