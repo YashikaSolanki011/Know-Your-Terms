@@ -19,9 +19,9 @@ const initialState: AgreementState = {
 
 export const agreementSummaryAsync = createAsyncThunk(
   'agreement/agreementSummary',
-  async ({ file, uid, targetGroup }: { file: File; uid: string; targetGroup: string }, { rejectWithValue }) => {
+  async ({ file, uid, targetGroup, language }: { file: File; uid: string; targetGroup: string; language: string }, { rejectWithValue }) => {
     try {
-      const response = await agreementService.agreementSummary(file, uid, targetGroup );
+      const response = await agreementService.agreementSummary(file, uid, targetGroup, language);
       return response;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Summary failed';

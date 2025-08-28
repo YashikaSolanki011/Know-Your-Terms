@@ -1,27 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { agreementService } from '../services/agreementService';
-import type { AgreementProcess, AgreementSummary } from '../types';
+import type { AgreementSummary } from '../types';
+import { caseService } from '../services/caseService';
 
-interface AgreementState {
-  agreementSummery: AgreementSummary | null;
-  agreementProcess: AgreementProcess | null;
+interface CaseState {
+  caseSummary: AgreementSummary | null;
+  caseTid: string | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: AgreementState = {
-  agreementSummery: null,
-  agreementProcess: null,
+const initialState: CaseState = {
+  caseSummary: null,
+  caseTid: null,
   loading: false,
   error: null,
 };
 
-export const agreementSummaryAsync = createAsyncThunk(
-  'agreement/agreementSummary',
-  async ({ file, uid, targetGroup }: { file: File; uid: string; targetGroup: string }, { rejectWithValue }) => {
+export const searchCaseAsync = createAsyncThunk(
+  'case/searchCase',
+  async (query: string, { rejectWithValue }) => {
     try {
-      const response = await agreementService.agreementSummary(file, uid, targetGroup );
+      const response = await caseService.searchCase(query);
       return response;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Summary failed';
@@ -31,56 +31,56 @@ export const agreementSummaryAsync = createAsyncThunk(
   }
 );
 
-export const agreementProcessAsync = createAsyncThunk(
-  'agreement/agreementProcess',
-  async (data: {uid:string, processType:string}, { rejectWithValue }) => {
+export const caseSummaryAsync = createAsyncThunk(
+  'case/caseSummary',
+  async (tid: string, { rejectWithValue }) => {
     try {
-      const response = await agreementService.agreementProcess(data);
+      const response = await caseService.caseSummary(tid);
       return response;
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Process failed';
+      const message = error.response?.data?.message || 'Case Summary failed';
       toast.error(message);
       return rejectWithValue(message);
     }
   }
 );
 
-const agreementSlice = createSlice({
-  name: 'agreement',
+const caseSlice = createSlice({
+  name: 'case',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Get agreement Summary
-      .addCase(agreementSummaryAsync.pending, (state) => {
+      // Get case Summary
+      .addCase(caseSummaryAsync.pending, (state) => {
         state.loading = true;
       })
-      .addCase(agreementSummaryAsync.fulfilled, (state, action) => {
+      .addCase(caseSummaryAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.agreementSummery = action.payload;
+        state.caseSummary = action.payload;
         state.error = null;
       })
-      .addCase(agreementSummaryAsync.rejected, (state, action) => {
+      .addCase(caseSummaryAsync.rejected, (state, action) => {
         state.loading = false;
-        state.agreementSummery = null;
+        state.caseSummary = null;
         state.error = action.payload as string;
       })
 
-      // get agreement Process
-      .addCase(agreementProcessAsync.pending, (state) => {
+      // get case Process
+      .addCase(searchCaseAsync.pending, (state) => {
         state.loading = true;
       })
-      .addCase(agreementProcessAsync.fulfilled, (state, action) => {
+      .addCase(searchCaseAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.agreementProcess = action.payload;
+        state.caseTid = action.payload;
         state.error = null;
       })
-      .addCase(agreementProcessAsync.rejected, (state, action) => {
+      .addCase(searchCaseAsync.rejected, (state, action) => {
         state.loading = false;
-        state.agreementProcess = null;
+        state.caseTid = null;
         state.error = action.payload as string;
       });
   },
 });
 
-export default agreementSlice.reducer;
+export default caseSlice.reducer;

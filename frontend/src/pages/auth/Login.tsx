@@ -94,7 +94,7 @@ const Login: React.FC = () => {
         } catch (regErr: any) {
           // If already exists, ignore; else show error
           if (regErr?.message && !regErr.message.includes('already exists')) {
-            toast.error(regErr.message || 'Failed to register user profile.');
+            toast.error(regErr.message || 'Failed to login user.');
             // Optionally return here
           }
           setGoogleLoading(false);

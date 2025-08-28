@@ -61,7 +61,7 @@ const Register: React.FC = () => {
           region: formData.region,
           language: formData.language,
         })).unwrap();
-        console.log("Registration result:", result); // Debug log
+        // console.log("Registration result:", result); // Debug log
         
         if (result.user) {
           toast.success("Account created successfully!");
