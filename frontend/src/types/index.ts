@@ -1,3 +1,22 @@
+// Shared types for agreement summaries
+export interface BusinessClause {
+  title: string;
+  explanation: string;
+  risk: string;
+  improvement: string;
+}
+
+export interface BusinessOutput {
+  about: string;
+  clauses: BusinessClause[];
+  financials: {
+    totalFee: string;
+    paymentMilestones: string[];
+    lateFee: string;
+  };
+  keyComplianceNotes: string[];
+  finalAssessment: { overallRisk: string; comment: string };
+}
 export interface User {
   email: string;
   emailVerified?: boolean;
@@ -28,4 +47,8 @@ export interface AgreementSummary {
 export interface AgreementProcess {
   uid: string;
   processType: string;
+}
+
+export interface caseSummary {
+  
 }

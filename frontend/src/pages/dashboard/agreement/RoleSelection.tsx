@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Building2, User } from "lucide-react";
-import Card from "../../components/common/Card";
-import Button from "../../components/common/Button";
+import Card from "../../../components/common/Card";
+import Button from "../../../components/common/Button";
+import { useNavigate } from "react-router-dom";
 
 const roles = [
   {
@@ -28,8 +29,13 @@ const roles = [
 ];
 
 const RoleSelection = () => {
+  const navigate = useNavigate();
+  const handleSelect = (roleId: string) => {
+    // Redirect to summary page with role as param or state
+    navigate(`/dashboard/agreement/summary?targetGroup=${roleId}`);
+  };
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#f8fafc] via-[#f3e9d2] to-[#fffbe6] px-4 py-28">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-28">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -75,7 +81,10 @@ const RoleSelection = () => {
                       {role.description}
                     </p>
                   </div>
-                  <Button className="bg-[#CDA047] hover:bg-[#b38a3e] text-white font-semibold px-6 py-3 rounded-full shadow-lg transition-all duration-300 border-2 border-[#CDA047] hover:border-[#b38a3e] w-full">
+                  <Button
+                    className="bg-[#CDA047] hover:bg-[#b38a3e] text-white font-semibold px-6 py-3 rounded-full shadow-lg transition-all duration-300 border-2 border-[#CDA047] hover:border-[#b38a3e] w-full"
+                    onClick={() => handleSelect(role.id)}
+                  >
                     Select {role.title}
                   </Button>
                 </div>

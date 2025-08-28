@@ -131,6 +131,10 @@ def extract_image(file_stream):
 def index():
     return render_template("index.html")
 
+@app.route("/active", methods=["GET"])
+def active():
+    return "active"
+
 @app.route("/upload", methods=["POST"])
 def upload():
     if "file" not in request.files:

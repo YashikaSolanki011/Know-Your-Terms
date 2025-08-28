@@ -3,12 +3,18 @@ import { Router } from 'express';
 import { 
     agreementSummary,
     processAgreement,
+    uploadFile,
 } from '../controllers/agreement.controller';
+import { upload } from '../middlewares/multer';
+import { authenticate } from '../middlewares/auth';
 
 const router = Router();
 
-router.post("/agreement-summary", agreementSummary)
+router.route("/agreement-summary").post(upload.fields([{ name: "file", maxCount: 1 }]), agreementSummary)
 
-router.post("/agreement-process", processAgreement)
+router.route("/agreement-process").post(authenticate, processAgreement)
+
+// upload file
+router.route("/upload").post(upload.fields([{ name: "file", maxCount: 1 }]), uploadFile);
 
 export default router;

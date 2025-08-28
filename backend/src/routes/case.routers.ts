@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 
-router.route("/search-cases").get(searchCases);
-router.route("/case-summary").get(getCaseSummary);
+router.route("/search-cases").post(searchCases);
+router.route("/case-summary").post(getCaseSummary);
 
 export default router;
