@@ -6,19 +6,51 @@ import { processWithGemini, summarizeAgreementWithGemini, translateText } from "
 import admin, { db } from "../db/firebase";
 import { AgreementHistory, ProcessHistory } from "../models/history.models";
 import { createAuditLog } from "./admin.controller";
+import axios from "axios";
+import FormData from 'form-data';
+import fs from 'fs';
 
 const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
-    const { uid, agreementText, language, targetGroup } = req.body;
+    const { uid, language, targetGroup } = req.body;
 
-    if (!uid || !agreementText || !targetGroup) {
+    if (!uid || !targetGroup) {
         await createAuditLog({
             uid: uid || 'unknown',
             action: 'AGREEMENT_SUMMARY',
             status: 'failure',
             entityType: 'Agreement',
-            details: 'Missing uid, agreementText, or targetGroup',
+            details: 'Missing uid, file, or targetGroup',
         });
-        throw new ApiError(400, 'uid, agreementText, and targetGroup are required');
+        throw new ApiError(400, 'uid, file, and targetGroup are required');
+    }
+
+    const file = (req.files && (req.files as any)['file'] && (req.files as any)['file'][0]) || null;
+
+    if (!file) {
+        throw new ApiError(400, 'File is required');
+    }
+
+    // file.path is the path to the file saved by multer
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(file.path), file.originalname);
+
+    const agreementText = await axios.post('http://127.0.0.1:5000/uploads', formData, {
+        headers: {
+            ...formData.getHeaders(),
+        },
+    });
+
+    // console.log('agreementText', agreementText);
+
+    if (!agreementText || !agreementText.data) {
+        await createAuditLog({
+            uid: uid || 'unknown',
+            action: 'AGREEMENT_SUMMARY',
+            status: 'failure',
+            entityType: 'Agreement',
+            details: 'Failed to retrieve agreement text',
+        });
+        throw new ApiError(500, 'Failed to retrieve agreement text from ai model');
     }
 
     // Optimized prompt templates for each target group
@@ -109,7 +141,7 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
                 ${agreementText}
             `;
             break;
-        case 'business':
+        case 'business_owner':
             prompt = `
                 You are a professional legal compliance assistant for small business owners. 
                 The user will provide a Memorandum of Association (MoA), vendor contract, or compliance document.
@@ -207,6 +239,8 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
             throw new ApiError(500, 'Failed to summarize agreement with Gemini');
         }
 
+        // console.log("AI-generated summary response:", geminiResponse);
+
         // Treat Gemini output as unstructured text (summary)
         let summary = typeof geminiResponse === 'string' ? geminiResponse : JSON.stringify(geminiResponse, null, 2);
 
@@ -224,20 +258,7 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
                 });
             }
         }
-
-        // Prepare agreement history object (store summary and aiRawOutput)
-        // const docRef = db.collection('agreementHistory').doc();
-        // const agreementHistory: AgreementHistory = {
-        //     id: docRef.id,
-        //     uid,
-        //     targetGroup: targetGroup,
-        //     processedAt: admin.firestore.Timestamp.now(),
-        //     summary: "",
-        //     aiRawOutput: geminiResponse,
-        //     language: language || 'en',
-        // };
-        // await docRef.set(agreementHistory);
-
+        
         await createAuditLog({
             uid,
             action: 'AGREEMENT_SUMMARY',
@@ -249,6 +270,7 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
         return res.status(200).json(
             new ApiResponse(200, geminiResponse, 'Agreement summarized successfully')
         );
+
     } catch (error: any) {
         await createAuditLog({
             uid,
@@ -347,4 +369,29 @@ const translateTextController = asyncHandler(async (req: Request, res: Response)
     }
 });
 
-export { agreementSummary, processAgreement, translateTextController };
+const uploadFile = asyncHandler(async (req: Request, res: Response) => {
+    // Multer's req.files is { [fieldname: string]: File[] }
+    const file = (req.files && (req.files as any)['file'] && (req.files as any)['file'][0]) || null;
+
+    if (!file) {
+        throw new ApiError(400, 'File is required');
+    }
+
+    // file.path is the path to the file saved by multer
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(file.path), file.originalname);
+
+    try {
+        const response = await axios.post('http://127.0.0.1:5000/uploads', formData, {
+            headers: {
+                ...formData.getHeaders(),
+            },
+        });
+        return res.status(200).json(new ApiResponse(200, response.data, 'File uploaded successfully'));
+    } catch (error) {
+        throw new ApiError(500, 'File upload failed');
+    }
+});
+
+
+export { agreementSummary, processAgreement, translateTextController, uploadFile };

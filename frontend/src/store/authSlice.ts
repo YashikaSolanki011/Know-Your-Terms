@@ -37,7 +37,7 @@ export const getCurrentUserAsync = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const user = await authService.getCurrentUser();
-      console.log('Fetched user:', user);
+      // console.log('Fetched user:', user);
       return user;
     } catch (error: any) {
       localStorage.removeItem('idToken');

@@ -8,7 +8,7 @@ const Kanoon_Api_Key = process.env.KANOON_API_KEY;
 
 // Step 1: Search API
 export const searchCases = asyncHandler(async (req, res) => {
-  let { query, page = 0 } = req.query;
+  let { query, page = 0 } = req.body;
   
   if (!query) throw new ApiError(400, 'query is required');
 
@@ -40,7 +40,7 @@ const kanoonRes = await axios.post(
 
 // Step 2: Fetch case by tid
 export const getCaseSummary = asyncHandler(async (req, res) => {
-    const { tid } = req.query;
+    const { tid } = req.body;
     if (!tid) throw new ApiError(400, 'tid is required');
 
     // Use POST with form data, as with search endpoint

@@ -165,7 +165,7 @@ const Navbar = () => {
             )}
           </AnimatePresence>
         </div>
-        <a href="/products" className="text-base font-semibold hover:text-[#CDA047] transition">{t("Products")}</a>
+        <a href="/role-selection" className="text-base font-semibold hover:text-[#CDA047] transition">{t("role")}</a>
       </nav>
 
       <div className="hidden sm:block">
