@@ -60,7 +60,7 @@ const Login: React.FC = () => {
       dispatch(getCurrentUserAsync());
       toast.success("Login successful!");
       setLoading(false);
-      navigate("/help");
+      navigate("/dashboard");
     } catch (error: any) {
       setLoading(false);
       setErrors({ general: error.message });
