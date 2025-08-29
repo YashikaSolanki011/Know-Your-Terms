@@ -102,6 +102,6 @@ export const getCaseSummary = asyncHandler(async (req, res) => {
 
     const geminiResponse = await summarizeAgreementWithGemini(prompt);
 
-    res.json(new ApiResponse(200, { geminiResponse }, "Case details fetched"));
+    res.json(new ApiResponse(200, geminiResponse, "Case details fetched"));
 
 });

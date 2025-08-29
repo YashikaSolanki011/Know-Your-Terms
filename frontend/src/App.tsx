@@ -14,6 +14,9 @@ import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { getCurrentUserAsync } from './store/authSlice';
 import SummaryPage from './pages/dashboard/agreement/SummaryPage';
 import { useLocation } from 'react-router-dom';
+import CasesList from './pages/dashboard/case/CasesList';
+import AgreementProcess from './pages/dashboard/process/AgreementProcess';
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -63,8 +66,11 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/active" element={<div>frontend active</div>} />
-            <Route path="/role-selection" element={isAuthenticated ? <RoleSelection /> : <Login />} />
+            <Route path='/dashboard' element={isAuthenticated ? <Dashboard /> : <Login />} />
+            <Route path="/dashboard/role-selection" element={isAuthenticated ? <RoleSelection /> : <Login />} />
             <Route path="/dashboard/agreement/summary" element={isAuthenticated ? <SummaryPageWithTargetGroup /> : <Login />} />
+            <Route path="/dashboard/case/case-details" element={isAuthenticated ? <CasesList /> : <Login />} />
+            <Route path="/dashboard/process/summary" element={isAuthenticated ? <AgreementProcess /> : <Login />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
