@@ -101,7 +101,7 @@ const Login: React.FC = () => {
         }
         dispatch(getCurrentUserAsync());
         setGoogleLoading(false);
-        navigate("/help");
+        navigate("/dashboard");
       } else {
         toast.error("Google login failed. No user information available.");
       }
