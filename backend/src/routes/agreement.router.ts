@@ -12,7 +12,7 @@ const router = Router();
 
 router.route("/agreement-summary").post(upload.fields([{ name: "file", maxCount: 1 }]), agreementSummary)
 
-router.route("/agreement-process").post(authenticate, processAgreement)
+router.route("/agreement-process").post(processAgreement)
 
 // upload file
 router.route("/upload").post(upload.fields([{ name: "file", maxCount: 1 }]), uploadFile);

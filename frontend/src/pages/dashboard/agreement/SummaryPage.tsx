@@ -139,18 +139,23 @@ export default function SummaryPage({ targetGroup }: Props) {
 
     return (
         <motion.div
-            className="max-w-6xl mx-auto p-6 space-y-6"
+            className="max-w-6xl mx-auto p-6 space-y-6 mt-24"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
         >
             {/* Header */}
-            <h1 className="text-2xl font-bold text-gray-900 mt-20">
-                {targetGroupLabel[targetGroup]}
-            </h1>
-            <p className="text-gray-600">
-                Upload your legal document below. The system will automatically analyze,
-                classify, and generate a professional summary.
-            </p>
+            <header className="mb-8 text-center">
+                <h1 className="text-4xl font-bold text-black flex items-center justify-center gap-2 tracking-tight">
+                    📄 {targetGroupLabel[targetGroup]}
+                </h1>
+                <p className="text-gray-800 text-lg mt-2">
+                    Upload a legal document to get a clear, AI-powered summary tailored for you.
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                    Powered by <span className="font-semibold text-[#F6A507]">Know Your Terms</span>
+                </p>
+                <div className="mt-4 w-16 border-b-2 border-[#CDA047] mx-auto"></div>
+            </header>
 
             {/* Upload Box */}
             <div className="border-2 border-dashed border-gray-300 rounded-2xl hover:border-blue-500 transition">

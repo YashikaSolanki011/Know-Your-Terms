@@ -66,7 +66,7 @@ const RoleSelection = () => {
           >
             <Card 
               variant="elevated" 
-              className="h-full flex flex-col items-center text-center group cursor-pointer hover:scale-105 transform transition-all duration-300"
+              className="h-full flex flex-col items-center text-center group"
             >
               <div className="flex flex-col items-center gap-6 h-full">
                 <div className="bg-[#fffbe6] p-6 rounded-full shadow-sm border border-[#CDA047]/20 group-hover:border-[#CDA047]/60 transition-all duration-300">
@@ -74,7 +74,7 @@ const RoleSelection = () => {
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <h2 className="text-xl font-heading font-semibold text-gray-900 mb-3 group-hover:text-[#CDA047] transition-colors duration-300">
+                    <h2 className="text-xl font-heading font-semibold text-gray-900 mb-3">
                       {role.title}
                     </h2>
                     <p className="text-[#5c4a1a] mb-6 text-sm leading-relaxed font-body">

@@ -165,7 +165,7 @@ const Navbar = () => {
             )}
           </AnimatePresence>
         </div>
-        <a href="/role-selection" className="text-base font-semibold hover:text-[#CDA047] transition">{t("role")}</a>
+        {isAuthenticated && <a href="/dashboard" className="text-base font-semibold hover:text-[#CDA047] transition">{t("Dashboard")}</a>}
       </nav>
 
       <div className="hidden sm:block">

@@ -3,8 +3,8 @@ import api from "../utils/baseApi";
 
 export const agreementService = {
     async agreementProcess(data: AgreementProcess): Promise<AgreementProcess> {
-        const response = await api.post('/agreement-process', data);
-        return response.data.data;
+        const response = await api.post('/agreements/agreement-process', data);
+        return response.data;
     },
 
     async agreementSummary(file: File, uid: string, targetGroup: string, language: string): Promise<AgreementSummary> {
