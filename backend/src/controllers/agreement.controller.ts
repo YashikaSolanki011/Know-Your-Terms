@@ -40,8 +40,6 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
         },
     });
 
-    // console.log('agreementText', agreementText);
-
     if (!agreementText || !agreementText.data) {
         await createAuditLog({
             uid: uid || 'unknown',

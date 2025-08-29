@@ -60,7 +60,7 @@ const Login: React.FC = () => {
       dispatch(getCurrentUserAsync());
       toast.success("Login successful!");
       setLoading(false);
-      navigate("/help");
+      navigate("/dashboard");
     } catch (error: any) {
       setLoading(false);
       setErrors({ general: error.message });
@@ -101,7 +101,7 @@ const Login: React.FC = () => {
         }
         dispatch(getCurrentUserAsync());
         setGoogleLoading(false);
-        navigate("/help");
+        navigate("/dashboard");
       } else {
         toast.error("Google login failed. No user information available.");
       }

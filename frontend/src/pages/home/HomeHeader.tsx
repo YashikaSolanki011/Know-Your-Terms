@@ -1,7 +1,7 @@
 
 import { useRef, useState } from "react";
 import { Volume2, VolumeOff } from "lucide-react";
-import  { Badge, Description } from "../../components/common/header";
+import  { Badge } from "../../components/common/header";
 import { Link } from "react-router-dom";
 
 export default function HomeHeader() {
@@ -17,7 +17,7 @@ export default function HomeHeader() {
 
   return (
     <header
-      className="relative w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#f8fafc] via-[#f3e9d2] to-[#fffbe6] px-4 pb-0 pt-32 md:pb-6 mb-4 md:mb-8"
+      className="relative w-full min-h-screen flex flex-col items-center justify-center px-4 pb-0 pt-32 md:pb-6 mb-4 md:mb-8"
     >
       <div className="w-full max-w-3xl flex flex-col items-center text-center mx-auto z-10">
         {/* Badge/Tag (optional, for B2B trust) */}
@@ -32,11 +32,11 @@ export default function HomeHeader() {
         </h1>
 
         {/* Subheading */}
-        <div>
+        {/* <div>
           <Description
             title="Our AI-powered platform simplifies complex legal documents like rental agreements, loan contracts, and terms of service into clear, easy-to-understand guidance. We help you uncover hidden clauses, understand your rights, and make informed decisions with confidence."
           />
-        </div>
+        </div> */}
 
         {/* CTA Buttons */}
         <div className="flex flex-row gap-4 justify-center mb-8 mt-4">
