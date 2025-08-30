@@ -151,12 +151,12 @@ const Navbar = () => {
                     <a
                       key={idx}
                       href={item.href}
-                      className="flex items-start gap-3 mb-2 cursor-pointer hover:bg-[#F6F0E3] p-3 rounded-lg transition group"
+                      className="flex items-start gap-3 mb-2 cursor-pointer hover:bg-gradient-to-br hover:from-[#e5e7eb] hover:via-[#f3f4f6] hover:to-[#f9fafb] group-hover:text-[#CDA047] hover:text-[#CDA047] p-3 rounded-lg transition group"
                     >
-                      <span className="text-xl group-hover:scale-110 transition">{item.icon}</span>
-                      <div>
-                        <div className="font-semibold text-gray-900 group-hover:text-[#CDA047]">{item.title}</div>
-                        <div className="text-gray-500 text-sm">{item.desc}</div>
+                      <span className="text-xl group-hover:scale-110 transition group-hover:text-[#CDA047]">{item.icon}</span>
+                      <div className="group-hover:text-[#CDA047] hover:text-[#CDA047]">
+                        <div className="font-semibold text-gray-900 group-hover:text-[#CDA047] hover:text-[#CDA047]">{item.title}</div>
+                        <div className="text-gray-500 text-sm group-hover:text-[#CDA047] hover:text-[#CDA047]">{item.desc}</div>
                       </div>
                     </a>
                   ))}
