@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import * as functions from "firebase-functions";
 dotenv.config();
 import { app } from "./app";
 
@@ -10,7 +11,7 @@ const isFirebaseEnv =
 if (isFirebaseEnv) {
   // Cloud Functions/Emulator
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const functions = require("firebase-functions");
+  // const functions = require("firebase-functions");
   exports.api = functions.https.onRequest(app);
 } else {
   // Local development
