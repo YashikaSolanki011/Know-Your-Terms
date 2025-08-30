@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-[#F6A507] text-white hover:bg-[#d18c06] focus:ring-[#F6A507] border border-[#F6A507]',
+    primary: 'bg-gradient-to-br from-[#e5e7eb] via-[#f3f4f6] to-[#f9fafb] text-gray-800 hover:bg-[#e0e7ef] focus:ring-[#b1b4b6] border border-[#b1b4b6] hover:from-[#e0e7ef] hover:via-[#f3f4f6] hover:to-[#f9fafb]',
     secondary: 'bg-white text-[#F6A507] hover:bg-[#fff8e1] focus:ring-[#F6A507] border border-[#F6A507]',
     outline: 'border border-[#F6A507] text-[#F6A507] bg-white hover:bg-[#fff8e1] focus:ring-[#F6A507]',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
@@ -44,7 +44,7 @@ const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {loading && (
-        <svg className="animate-spin -ml-1 mr-3 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>

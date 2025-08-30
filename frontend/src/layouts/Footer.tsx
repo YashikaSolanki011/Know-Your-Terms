@@ -4,7 +4,7 @@ import logo from '../assets/react.svg';
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-[#f8fafc] via-[#f3e9d2] to-[#fffbe6] border-t-2 border-[#CDA047]">
+    <footer className="bg-gradient-to-br from-[#b1b4b6] via-[#e2d0a6] to-[#efe19e] border-t-2 border-[#CDA047]">
       {/* Government Header Banner */}
       <div className="bg-gradient-to-r from-orange-500 via-white to-green-500 h-1"></div>
       
