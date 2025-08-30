@@ -6,7 +6,6 @@ import {
     uploadFile,
 } from '../controllers/agreement.controller';
 import { upload } from '../middlewares/multer';
-import { authenticate } from '../middlewares/auth';
 
 const router = Router();
 

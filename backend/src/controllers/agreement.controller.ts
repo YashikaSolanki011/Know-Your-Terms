@@ -3,8 +3,6 @@ import { ApiError } from "../utility/ApiError";
 import { asyncHandler } from "../utility/asyncHandler";
 import ApiResponse from "../utility/ApiResponse";
 import { processWithGemini, summarizeAgreementWithGemini, translateText } from "../services/geminiApi.services";
-import admin, { db } from "../db/firebase";
-import { AgreementHistory, ProcessHistory } from "../models/history.models";
 import { createAuditLog } from "./admin.controller";
 import axios from "axios";
 import FormData from 'form-data';
@@ -25,7 +23,7 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const file = (req.files && (req.files as any)['file'] && (req.files as any)['file'][0]) || null;
-
+    
     if (!file) {
         throw new ApiError(400, 'File is required');
     }
