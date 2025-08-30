@@ -1,0 +1,32 @@
+name: Build and Deploy Flask AI Model (Docker) to Azure Web App for Containers
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}/flask-ai-model:${{ github.sha }} ./ai_model
+          docker push ${{ secrets.AZURE_CONTAINER_REGISTRY }}/flask-ai-model:${{ github.sha }}
+
+      - name: Deploy to Azure Web App for Containers
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          images: ${{ secrets.AZURE_CONTAINER_REGISTRY }}/flask-ai-model:${{ github.sha }}
+          slot-name: 'production'
