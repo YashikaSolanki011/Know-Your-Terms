@@ -30,7 +30,9 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          source venv/bin/activate
+          pip install -r ai_model/requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -68,4 +70,5 @@ jobs:
         with:
           app-name: 'know-yout-term-ai'
           slot-name: 'Production'
+
           
