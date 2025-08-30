@@ -40,6 +40,8 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
         },
     });
 
+    // console.log(agreementText);
+
     if (!agreementText || !agreementText.data) {
         await createAuditLog({
             uid: uid || 'unknown',
@@ -54,6 +56,90 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
     // Optimized prompt templates for each target group
     let prompt = '';
     switch (targetGroup) {
+        // case 'citizen':
+        //     prompt = `
+        //         You are a legal simplifier for everyday citizens.
+        //         Always return ONLY valid JSON that strictly matches this schema:
+
+        //         {
+        //         "$schema": "http://json-schema.org/draft-07/schema#",
+        //         "title": "AgreementAnalysis",
+        //         "type": "object",
+        //         "properties": {
+        //             "about": {
+        //             "type": "string",
+        //             "minLength": 30
+        //             },
+        //             "benefits": {
+        //             "type": "array",
+        //             "items": { "type": "string", "minLength": 5 },
+        //             "minItems": 3
+        //             },
+        //             "risks": {
+        //             "type": "array",
+        //             "items": { "type": "string", "minLength": 5 },
+        //             "minItems": 3
+        //             },
+        //             "clarity": {
+        //             "type": "object",
+        //             "properties": {
+        //                 "score": { "type": "integer", "minimum": 1, "maximum": 10 },
+        //                 "comment": { "type": "string", "minLength": 5 }
+        //             },
+        //             "required": ["score", "comment"]
+        //             },
+        //             "fairness": {
+        //             "type": "object",
+        //             "properties": {
+        //                 "score": { "type": "integer", "minimum": 1, "maximum": 10 },
+        //                 "comment": { "type": "string", "minLength": 5 }
+        //             },
+        //             "required": ["score", "comment"]
+        //             },
+        //             "repaymentDetails": {
+        //             "type": "object",
+        //             "properties": {
+        //                 "emiAmount": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
+        //                 "totalRepayment": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
+        //                 "interestExtra": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
+        //                 "note": { "type": "string" }
+        //             },
+        //             "required": ["emiAmount", "totalRepayment", "interestExtra"]
+        //             },
+        //             "suggestions": {
+        //             "type": "array",
+        //             "items": { "type": "string", "minLength": 5 },
+        //             "minItems": 1
+        //             },
+        //             "analogy": {
+        //             "type": "string",
+        //             "minLength": 5
+        //             }
+        //         },
+        //         "required": [
+        //             "about",
+        //             "benefits",
+        //             "risks",
+        //             "clarity",
+        //             "fairness",
+        //             "suggestions",
+        //             "analogy"
+        //         ],
+        //         "additionalProperties": false
+        //         }
+
+        //         Guidelines:
+        //         - Use clear, simple language.
+        //         - If repayment details are not relevant, return an object with all fields set to "N/A".
+        //         - Always provide at least 3 benefits and 3 risks.
+        //         - Do not include any text outside of JSON.
+        //         - If repayment details can be calculated, always provide all three fields (emiAmount, totalRepayment, interestExtra).
+        //         - Keep numeric fields clean (no words like 'approx') and move explanations into 'note'.
+        //         - Fairness score must include a 1-sentence justification.
+
+        //         Agreement Text:
+        //         ${agreementText}
+        //     `;
         case 'citizen':
             prompt = `
                 You are a legal simplifier for everyday citizens.
@@ -64,81 +150,132 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
                 "title": "AgreementAnalysis",
                 "type": "object",
                 "properties": {
+                    "title": {
+                        "type": "string",
+                        "minLength": 5
+                    },
                     "about": {
-                    "type": "string",
-                    "minLength": 10
+                        "type": "string",
+                        "minLength": 30
                     },
                     "benefits": {
-                    "type": "array",
-                    "items": { "type": "string", "minLength": 5 },
-                    "minItems": 3
+                        "type": "array",
+                        "items": { "type": "string", "minLength": 5 },
+                        "minItems": 0
                     },
                     "risks": {
-                    "type": "array",
-                    "items": { "type": "string", "minLength": 5 },
-                    "minItems": 3
+                        "type": "array",
+                        "items": { "type": "string", "minLength": 5 },
+                        "minItems": 0
                     },
                     "clarity": {
-                    "type": "object",
-                    "properties": {
-                        "score": { "type": "integer", "minimum": 1, "maximum": 10 },
-                        "comment": { "type": "string", "minLength": 5 }
-                    },
-                    "required": ["score", "comment"]
+                        "type": "object",
+                        "properties": {
+                            "score": { "type": "integer", "minimum": 1, "maximum": 10 },
+                            "comment": { "type": "string", "minLength": 5 }
+                        },
+                        "required": ["score", "comment"]
                     },
                     "fairness": {
-                    "type": "object",
-                    "properties": {
-                        "score": { "type": "integer", "minimum": 1, "maximum": 10 },
-                        "comment": { "type": "string", "minLength": 5 }
-                    },
-                    "required": ["score", "comment"]
+                        "type": "object",
+                        "properties": {
+                            "score": { "type": "integer", "minimum": 1, "maximum": 10 },
+                            "comment": { "type": "string", "minLength": 5 }
+                        },
+                        "required": ["score", "comment"]
                     },
                     "repaymentDetails": {
-                    "type": "object",
-                    "properties": {
-                        "emiAmount": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
-                        "totalRepayment": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
-                        "interestExtra": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
-                        "note": { "type": "string" }
-                    },
-                    "required": ["emiAmount", "totalRepayment", "interestExtra"]
+                        "type": "object",
+                        "properties": {
+                            "emiAmount": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
+                            "totalRepayment": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
+                            "interestExtra": { "type": "string", "pattern": "^[₹]?[0-9,]+(\\.[0-9]{1,2})?$" },
+                            "note": { "type": "string" }
+                        },
+                        "required": ["emiAmount", "totalRepayment", "interestExtra"]
                     },
                     "suggestions": {
-                    "type": "array",
-                    "items": { "type": "string", "minLength": 5 },
-                    "minItems": 1
+                        "type": "array",
+                        "items": { "type": "string", "minLength": 5 },
+                        "minItems": 0
                     },
                     "analogy": {
-                    "type": "string",
-                    "minLength": 5
+                        "type": "string",
+                        "minLength": 5
                     }
                 },
                 "required": [
+                    "title",
                     "about",
                     "benefits",
                     "risks",
                     "clarity",
                     "fairness",
-                    "suggestions",
                     "analogy"
                 ],
                 "additionalProperties": false
                 }
 
                 Guidelines:
-                - Use clear, simple language.
+                - "title" should be a short headline (e.g., "Employment Agreement Summary").
+                - "about" must be a longer explanation in simple language.
+                - If there are NO genuine benefits or risks, return an empty array [] for that field.
                 - If repayment details are not relevant, return an object with all fields set to "N/A".
-                - Always provide at least 3 benefits and 3 risks.
-                - Do not include any text outside of JSON.
-                - If repayment details can be calculated, always provide all three fields (emiAmount, totalRepayment, interestExtra).
-                - Keep numeric fields clean (no words like 'approx') and move explanations into 'note'.
+                - Include "suggestions" ONLY if there are meaningful improvements. If not, return an empty array [] for that field.
+                - Never invent legal points: base all analysis only on the agreement text provided.
                 - Fairness score must include a 1-sentence justification.
+                - Do not include any text outside of JSON.
+                - Prices must be given in Indian Rupees (₹), with approximate ranges.
 
                 Agreement Text:
                 ${agreementText}
             `;
             break;
+        
+            // case 'business_owner':
+            // prompt = `
+            //     You are a professional legal compliance assistant for small business owners. 
+            //     The user will provide a Memorandum of Association (MoA), vendor contract, or compliance document.
+
+            //     Always return ONLY valid JSON strictly following this schema:
+
+            //     {
+            //     "about": "string (short summary of what this document/contract is about)",
+            //     "clauses": [
+            //         {
+            //         "title": "string (clause heading or generated short title)",
+            //         "explanation": "string (business-friendly explanation of what this clause means in practice)",
+            //         "risk": "string (compliance, legal, or operational risk, e.g., conflicts with Companies Act, unclear payment terms)",
+            //         "improvement": "string (actionable recommendation, additional clause, or negotiation tip)"
+            //         }
+            //     ],
+            //     "financials": {
+            //         "totalFee": "string (if applicable, otherwise 'N/A')",
+            //         "paymentMilestones": ["string (if applicable, otherwise 'N/A')"],
+            //         "lateFee": "string (if applicable, otherwise 'N/A')"
+            //     },
+            //     "keyComplianceNotes": [
+            //         "array of strings — references to Indian laws, regulations, or compliance frameworks relevant to the document"
+            //     ],
+            //     "finalAssessment": {
+            //         "overallRisk": "Low | Medium | High",
+            //         "comment": "string (1-2 sentence summary highlighting critical risks and suggested focus areas for a business founder)"
+            //     }
+            //     }
+
+            //     Guidelines:
+            //     - Include at least 10 clauses; combine or summarize clauses if needed.
+            //     - Provide actionable improvements for each clause, including risk mitigation, scope definition, deliverables, and security if relevant.
+            //     - Use Indian legal and business context (Companies Act, LLP Act, GST, IT Act, DPDP Act, Arbitration & Conciliation Act, FSSAI, RTE, etc.).
+            //     - Keep explanations professional, concise, and business-friendly.
+            //     - If no financial terms exist, set all financial fields to 'N/A'.
+            //     - Do not include any text outside the JSON structure.
+
+            //     Business Type: General
+            //     Agreement Text:
+            //     ${agreementText}
+            // `;
+            // break;
         case 'business_owner':
             prompt = `
                 You are a professional legal compliance assistant for small business owners. 
@@ -147,13 +284,14 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
                 Always return ONLY valid JSON strictly following this schema:
 
                 {
+                "title": "string (short, professional document title e.g., 'Vendor Service Agreement – IT Support')",
                 "about": "string (short summary of what this document/contract is about)",
                 "clauses": [
                     {
                     "title": "string (clause heading or generated short title)",
                     "explanation": "string (business-friendly explanation of what this clause means in practice)",
-                    "risk": "string (compliance, legal, or operational risk, e.g., conflicts with Companies Act, unclear payment terms)",
-                    "improvement": "string (actionable recommendation, additional clause, or negotiation tip)"
+                    "risk": "string (compliance, legal, or operational risk — if none, return 'N/A')",
+                    "improvement": "string (actionable recommendation or negotiation tip — if none, return 'N/A')"
                     }
                 ],
                 "financials": {
@@ -165,60 +303,102 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
                     "array of strings — references to Indian laws, regulations, or compliance frameworks relevant to the document"
                 ],
                 "finalAssessment": {
-                    "overallRisk": "Low | Medium | High",
-                    "comment": "string (1-2 sentence summary highlighting critical risks and suggested focus areas for a business founder)"
+                    "overallScore": "integer (1–10 scale, 1 = very high risk, 10 = very safe)",
+                    "comment": "string (2–3 sentences summary highlighting critical risks and protections)",
+                    "recommendations": ["array of practical, prioritized recommendations for the business owner"]
                 }
                 }
 
                 Guidelines:
-                - Include at least 10 clauses; combine or summarize clauses if needed.
-                - Provide actionable improvements for each clause, including risk mitigation, scope definition, deliverables, and security if relevant.
+                - Only include as many clauses as actually exist; do not invent extras.
+                - If a clause has no specific risk, set "risk": "N/A".
+                - If no improvement is needed, set "improvement": "N/A".
+                - Keep explanations concise but clear for a business founder.
                 - Use Indian legal and business context (Companies Act, LLP Act, GST, IT Act, DPDP Act, Arbitration & Conciliation Act, FSSAI, RTE, etc.).
-                - Keep explanations professional, concise, and business-friendly.
-                - If no financial terms exist, set all financial fields to 'N/A'.
+                - If no financial terms exist, set all financial fields to "N/A".
+                - In "finalAssessment", provide both a numeric score (1–10) and recommendations.
                 - Do not include any text outside the JSON structure.
+                - Prices must be given in Indian Rupees (₹), with approximate ranges.
 
                 Business Type: General
                 Agreement Text:
                 ${agreementText}
             `;
-            break;
+            break
+        // case 'student':
+        //     prompt = `
+        //         You are a professional legal compliance assistant for students and young professionals. 
+        //         The user is sharing an internship, freelance, employment, or educational agreement. Optionally, the user may specify the type of agreement or role for tailored guidance (e.g., 'internship in software', 'freelance design', 'campus placement').
+
+        //         Always return ONLY valid JSON that strictly follows this schema:
+
+        //         {
+        //         "about": "Short summary of the document in student-friendly terms",
+        //         "clauses": [
+        //             {
+        //             "title": "Clause title",
+        //             "explanation": "Simple explanation of what it means",
+        //             "example": "Relatable analogy or scenario",
+        //             "questionsToAsk": ["Question 1", "Question 2"]
+        //             }
+        //         ],
+        //         "keyLegalNotes": ["References to Indian law if relevant"],
+        //         "finalTips": ["Actionable tips for students or young professionals"]
+        //         }
+
+        //         Guidelines:
+        //         - Include at least 8–10 clauses, summarizing or combining if necessary.
+        //         - Focus on actionable guidance around stipend/compensation, intellectual property rights, scope of work, confidentiality, and exit/termination clauses.
+        //         - Use Indian legal context wherever possible (e.g., Shops & Establishments Act, IT Act, Copyright Act, Industrial Disputes Act, labor laws).
+        //         - Keep explanations clear, supportive, and professional—like a mentor explaining rights and responsibilities.
+        //         - Include relatable examples or analogies to help understanding.
+        //         - Suggest relevant questions students or professionals should ask before signing.
+        //         - Do not include any text outside of JSON.
+        //         - If no financial terms exist, indicate 'N/A'.
+
+        //         Agreement Text:
+        //         ${agreementText}
+        //     `;
+        //     break;
+        
         case 'student':
             prompt = `
                 You are a professional legal compliance assistant for students and young professionals. 
                 The user is sharing an internship, freelance, employment, or educational agreement. Optionally, the user may specify the type of agreement or role for tailored guidance (e.g., 'internship in software', 'freelance design', 'campus placement').
 
-                Always return ONLY valid JSON that strictly follows this schema:
+                Always return ONLY valid JSON strictly following this schema:
 
                 {
-                "about": "Short summary of the document in student-friendly terms",
+                "title": "string (short, professional title e.g., 'Internship Agreement – Software Development')",
+                "about": "string (short summary of the document in student-friendly terms)",
                 "clauses": [
                     {
-                    "title": "Clause title",
-                    "explanation": "Simple explanation of what it means",
-                    "example": "Relatable analogy or scenario",
-                    "questionsToAsk": ["Question 1", "Question 2"]
+                    "title": "string (clause title)",
+                    "explanation": "string (2–3 sentence clear explanation of what this clause means in practice for the student)"
                     }
                 ],
-                "keyLegalNotes": ["References to Indian law if relevant"],
-                "finalTips": ["Actionable tips for students or young professionals"]
+                "keyLegalNotes": ["array of references to Indian law, if relevant (otherwise 'N/A')"],
+                "finalTips": ["array of 3–5 actionable, supportive tips for students or young professionals"]
                 }
 
                 Guidelines:
-                - Include at least 8–10 clauses, summarizing or combining if necessary.
-                - Focus on actionable guidance around stipend/compensation, intellectual property rights, scope of work, confidentiality, and exit/termination clauses.
-                - Use Indian legal context wherever possible (e.g., Shops & Establishments Act, IT Act, Copyright Act, Industrial Disputes Act, labor laws).
-                - Keep explanations clear, supportive, and professional—like a mentor explaining rights and responsibilities.
-                - Include relatable examples or analogies to help understanding.
-                - Suggest relevant questions students or professionals should ask before signing.
-                - Do not include any text outside of JSON.
-                - If no financial terms exist, indicate 'N/A'.
-
+                - Include 8–10 clauses, summarizing or combining if necessary. Each explanation should be 2–3 sentences long and student-friendly.
+                - Keep tone professional but supportive, like a mentor explaining key points.
+                - Focus on financial terms, intellectual property, confidentiality, termination/exit, stipend, certificate/experience letter, and working hours.
+                - Do not generate unrealistic 'examples' or unnecessary suggestions.
+                - Use Indian legal context wherever relevant (Shops & Establishments Act, IT Act, Copyright Act, Industrial Disputes Act, labor laws).
+                - If no financial terms exist, mention 'N/A'.
+                - Output only valid JSON with no extra text.
+                - Prices must be given in Indian Rupees (₹), with approximate ranges.
+                
                 Agreement Text:
                 ${agreementText}
             `;
             break;
-        default:
+
+                    break;
+
+            default:
             throw new ApiError(400, 'Invalid targetGroup');
     }
 
@@ -309,23 +489,6 @@ const processAgreement = asyncHandler(async (req: Request, res: Response) => {
             });
             throw new ApiError(500, 'Failed to process agreement with Gemini');
         }
-
-        // // Prepare process history object
-        // const docRef = db.collection('processHistory').doc();
-        // const processHistory: ProcessHistory = {
-        //     id: docRef.id,
-        //     uid,
-        //     processType,
-        //     processedAt: admin.firestore.Timestamp.now(),
-        //     processSteps: geminiResponse.processSteps,
-        //     requiredDocuments: geminiResponse.requiredDocuments,
-        //     creationLinks: geminiResponse.creationLinks,
-        //     priceInfo: geminiResponse.priceInfo,
-        //     needExpert: geminiResponse.needExpert,
-        //     aiRawOutput: geminiResponse,
-        //     language: language || 'en',
-        // };
-        // await docRef.set(processHistory);
 
         // Audit log (success)
         await createAuditLog({

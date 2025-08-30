@@ -48,11 +48,27 @@ export async function summarizeAgreementWithGemini(prompt: string): Promise<any>
     }
 }
 
-// gemani api for process for agreement/ term and condition summary, review, analysis, etc.
-
 // Optimized: user provides only the process/task name (e.g., 'rental agreement'), not a full prompt
 export async function processWithGemini(task: string): Promise<any> {
-    const prompt = `Given the following task, answer these questions in JSON format with keys: processSteps, requiredDocuments, creationLinks, priceInfo, needExpert.\n\n1. What is the process for this task?\n2. What are the documents required for this task?\n3. From where can we create documents (websites/links)?\n4. What are the prices of the document?\n5. When do we need a lawyer or CA?\n\nTask: ${task}`;
+    // const prompt = `Given the following task, answer these questions in JSON format with keys: processSteps, requiredDocuments, creationLinks, priceInfo, needExpert.\n\n1. What is the process for this task (do NOT add numbering, just the description)?\n2. What are the documents required for this task?\n3. From where can we create documents (websites/links)?\n4. What are the prices of the document?\n5. When do we need a lawyer or CA?\n\nTask: ${task}`;
+    const prompt = `Given the following task, answer these questions in JSON format with keys: processSteps, requiredDocuments, creationLinks, priceInfo, needExpert.
+
+    ⚠️ Important formatting rules:
+    - Provide plain text only (no markdown, no bold, no numbering like 1., 2., etc).
+    - Each item should be a clean string.
+    - creationLinks must be an array of objects with keys: name, url, disclaimer.
+    - Do not invent or assume links. If no reliable link exists, set "url": "N/A".
+    - If a disclaimer is needed, write it in plain text without symbols like * or **.
+    - Prices must be given in Indian Rupees (₹), with approximate ranges.
+
+    Questions:
+    1. List the process steps as an array of plain text items (no numbering, just the description).
+    2. What are the documents required for this task?
+    3. From where can we create documents (websites/links)?
+    4. What are the prices of the document?
+    5. When do we need a lawyer or CA?
+
+    Task: ${task}`;
 
     const requestBody = {
         contents: [

@@ -9,8 +9,6 @@ type Props = {
   targetGroup: "citizen" | "student" | "business_owner";
 };
 
-// Define type for AI raw output (expandable later)
-
 // Types for each summary output
 interface Clause {
   title: string;
@@ -19,6 +17,7 @@ interface Clause {
   questionsToAsk: string[];
 }
 interface StudentOutput {
+  title: string;
   about: string;
   clauses: Clause[];
   keyLegalNotes: string[];
@@ -31,6 +30,8 @@ import { generateBusinessPDF } from "../../../components/pdf/bussinessPdf";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { agreementSummaryAsync } from "../../../store/agreementSlice";
 import { toast } from "react-toastify";
+import Button from "../../../components/common/Button";
+import { generateStudentPDF } from "../../../components/pdf/studentPdf";
 interface CitizenOutput {
   title: string;
   about: string;
@@ -59,6 +60,7 @@ export default function SummaryPage({ targetGroup }: Props) {
     const [file, setFile] = useState<File | null>(null);
     const [summary, setSummary] = useState<SummaryUnion | null>(null);
     const [loading, setLoading] = useState(false);
+    const [showUpload, setShowUpload] = useState(true);
     const { user } = useAppSelector((state) => state.auth);
     const targetGroupLabel: Record<Props["targetGroup"], string> = {
         citizen: "Citizen Document Summary",
@@ -87,11 +89,7 @@ export default function SummaryPage({ targetGroup }: Props) {
 
         setLoading(true);
         setSummary(null);
-
-        console.log("Selected file:", selectedFile);
-        console.log("User ID:", user.uid);
-        console.log("Target group:", targetGroup);
-        console.log("Language:", language);
+        setShowUpload(false);
 
         try {
             const response: any = await dispatch(agreementSummaryAsync({
@@ -100,8 +98,6 @@ export default function SummaryPage({ targetGroup }: Props) {
                 targetGroup: targetGroup,
                 language: language,
             })).unwrap();
-            console.log("AI-generated summary response:", response);
-
             if (response?.statusCode === 200 || response?.success === true) {
                 setSummary({
                     type: targetGroup,
@@ -115,7 +111,6 @@ export default function SummaryPage({ targetGroup }: Props) {
             }
         } catch (error) {
             toast.error("Failed to summarize the document. Please try again later.");
-            console.error("Error summarizing document:", error);
             setLoading(false);
         } finally {
             setLoading(false);
@@ -139,7 +134,7 @@ export default function SummaryPage({ targetGroup }: Props) {
 
     return (
         <motion.div
-            className="max-w-6xl mx-auto p-6 space-y-6 mt-24"
+            className="min-h-screen max-w-7xl mx-auto p-6 space-y-6 mt-24"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
         >
@@ -157,43 +152,96 @@ export default function SummaryPage({ targetGroup }: Props) {
                 <div className="mt-4 w-16 border-b-2 border-[#CDA047] mx-auto"></div>
             </header>
 
-            {/* Upload Box */}
-            <div className="border-2 border-dashed border-gray-300 rounded-2xl hover:border-blue-500 transition">
-                <div className="flex flex-col items-center justify-center p-10">
-                    <Upload className="w-10 h-10 text-blue-500 mb-4" />
-                    <p className="text-gray-700 mb-2">
-                        {file ? file.name : "Drag & drop or click to upload a document"}
-                    </p>
-                    <input
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        id="file-upload"
-                    />
-                    <label
-                        htmlFor="file-upload"
-                        className="cursor-pointer px-4 py-2 mt-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+
+            {/* Upload Box (show only if showUpload is true and not loading) */}
+            {showUpload && !loading && (
+                <>
+                    <div className="max-w-6xl mx-auto border-2 border-dashed border-gray-300 rounded-2xl hover:border-gray-400 transition bg-white">
+                        <div className="flex flex-col items-center justify-center p-10">
+                            <Upload className="w-10 h-10 text-gray-500 mb-4" />
+                            <p className="text-gray-700 mb-2">
+                                {file ? file.name : "Drag & drop or click to upload a document"}
+                            </p>
+                            <p className="text-gray-700 mb-2">
+                                Only PDF, DOC, and DOCX file formats are supported.
+                            </p>
+                            <input
+                                type="file"
+                                accept=".pdf,.doc,.docx"
+                                onChange={handleFileUpload}
+                                className="hidden"
+                                id="file-upload"
+                            />
+                            <label
+                                htmlFor="file-upload"
+                                className="cursor-pointer px-4 py-2 mt-2 rounded-md bg-gradient-to-br from-[#e5e7eb] via-[#f3f4f6] to-[#f9fafb] text-gray-800 hover:bg-[#e0e7ef] focus:ring-[#b1b4b6] border border-[#b1b4b6] hover:from-[#e0e7ef] hover:via-[#f3f4f6] hover:to-[#f9fafb]"
+                            >
+                                Upload Document
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* Example Uploaded Document based on role */}
+                    <div className="max-w-6xl mx-auto mt-4">
+                        <p className="text-gray-700 font-medium mb-1">Example documents you can upload:</p>
+                        {targetGroup === "citizen" && (
+                            <ul className="text-gray-600 text-sm list-disc pl-5">
+                                <li>Rental/Lease Agreement</li>
+                                <li>Loan Agreement</li>
+                                <li>Sale Agreement (Property/Vehicle)</li>
+                                <li>Will/Inheritance Agreement</li>
+                                <li>Power of Attorney</li>
+                            </ul>
+                        )}
+                        {targetGroup === "student" && (
+                            <ul className="text-gray-600 text-sm list-disc pl-5">
+                                <li>Internship Agreement</li>
+                                <li>Offer Letter / Employment Contract</li>
+                                <li>Freelance Project Contract</li>
+                                <li>NDA (Non-Disclosure Agreement)</li>
+                            </ul>
+                        )}
+                        {targetGroup === "business_owner" && (
+                            <ul className="text-gray-600 text-sm list-disc pl-5">
+                                <li>MoA / LLP Agreement</li>
+                                <li>Vendor / Client Contract</li>
+                                <li>Employment Agreement</li>
+                                <li>Service Agreement</li>
+                                <li>IP Assignment Agreement</li>
+                            </ul>
+                        )}
+                    </div>
+                </>
+            )}
+            {/* Re-upload Button (show only if summary is present and not loading) */}
+            {summary && !loading && !showUpload && (
+                <div className="flex justify-center">
+                    <Button
+                        onClick={() => {
+                            setShowUpload(true);
+                            setSummary(null);
+                            setFile(null);
+                        }}
                     >
-                        Upload Document
-                    </label>
+                        Re-upload Document
+                    </Button>
                 </div>
-            </div>
+            )}
 
             {/* Loader Section */}
             {loading && (
-                <div className="flex flex-col items-center justify-center py-10">
-                    <svg className="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <div className="flex flex-col max-w-6xl mx-auto border border-gray-200 rounded-lg bg-white items-center justify-center py-10">
+                    <svg className="animate-spin h-10 w-10 text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
-                    <p className="text-blue-700 font-medium">Analyzing your document... Please wait.</p>
+                    <p className="text-gray-700 font-medium">Analyzing your document... Please wait.</p>
                 </div>
             )}
 
             {/* Warning / Invalid Doc */}
             {!file && !loading && (
-                <div className="flex items-center text-yellow-600 bg-yellow-50 p-3 rounded-lg shadow-sm">
+                <div className="flex max-w-6xl mx-auto items-center text-yellow-600 bg-yellow-50 p-3 rounded-lg shadow-sm">
                     <AlertCircle className="w-5 h-5 mr-2" />
                     <p className="text-sm">
                         Please upload a document to see the summary.
@@ -206,13 +254,15 @@ export default function SummaryPage({ targetGroup }: Props) {
 
             {/* Action Buttons */}
             {summary && !loading && (
-                <div className="flex gap-4 mt-6">
+                <div className="flex max-w-6xl mx-auto gap-4 mt-6">
                     <button
                         onClick={() => {
                             if (summary.type === "business_owner") {
                                 generateBusinessPDF(summary);
                             } else if (summary.type === "citizen") {
                                 generateCitizenPDF(summary);
+                            } else if (summary.type === "student") {
+                                generateStudentPDF(summary);
                             } else {
                                 alert(
                                     "PDF export is only available for Citizen and Business Owner summaries."

@@ -16,20 +16,20 @@ export const searchCases = asyncHandler(async (req, res) => {
   if (Array.isArray(query)) query = query[0];
   if (typeof query !== 'string') throw new ApiError(400, 'query must be a string');
 
-const kanoonRes = await axios.post(
-  "https://api.indiankanoon.org/search/",
-  new URLSearchParams({
-    formInput: query,
-    pagenum: page.toString(),
-  }),
-  {
-    headers: {
-      Authorization: `Token ${Kanoon_Api_Key}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json"
-    },
-  }
-);
+  const kanoonRes = await axios.post(
+    "https://api.indiankanoon.org/search/",
+    new URLSearchParams({
+      formInput: query,
+      pagenum: page.toString(),
+    }),
+    {
+      headers: {
+        Authorization: `Token ${Kanoon_Api_Key}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json"
+      },
+    }
+  );
 
   if (!kanoonRes.data || (!kanoonRes.data.results && !kanoonRes.data.docs)) {
     throw new ApiError(404, "No results found");
@@ -81,6 +81,7 @@ export const getCaseSummary = asyncHandler(async (req, res) => {
         3. Keep the summary concise but legally accurate.
         4. Avoid copying raw text; instead, rewrite in simple, professional language.
         5. Where possible, highlight the legal principles established.
+        6. If required Prices must be given in Indian Rupees (₹), with approximate ranges.
 
         Output the summary in JSON with this format:
         {
