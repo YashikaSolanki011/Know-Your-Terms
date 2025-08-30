@@ -1,6 +1,6 @@
 // src/components/common/Footer.tsx
 import { Mail, Twitter, Github, Linkedin } from "lucide-react";
-import logo from '../assets/react.svg';
+import logo from '../assets/logo2.png';
 
 export default function Footer() {
   return (
@@ -15,7 +15,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center mb-4">
               <div className="flex items-center">
-                <img src={logo} alt="Know Your Terms Logo" className="h-12 w-12 mr-3" />
+                <img src={logo} alt="Know Your Terms Logo" className="h-20 w-16 mr-3" />
                 <div>
                   <h2 className="text-xl font-heading font-bold text-gray-900">Know Your Terms</h2>
                   <p className="text-[#CDA047] text-sm font-semibold">AI Legal Document Platform</p>

@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import i18n from "../utils/i18n";
 import { useTranslation } from "react-i18next";
 import {LanguageDropdown, solutionsDropdown} from "./Dropdown";
-import Button from "../components/common/Button";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { ArrowRight } from "lucide-react";
 import { getCurrentUserAsync } from "../store/authSlice";
+import Button from "../components/common/Button";
 
 
 const Navbar = () => {
@@ -47,7 +47,7 @@ const Navbar = () => {
         <a href="/">
           <img
             className="h-10 w-auto object-cover cursor-pointer"
-            src="/assets/logo.png"
+            src="/logo.png"
             alt="Know Your Term logo"
             loading="lazy"
           />
@@ -142,7 +142,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.95 }}
                 transition={{ duration: 0.22, ease: "easeOut" }}
-                className="absolute left-1/2 -translate-x-1/2 top-12 w-[700px] bg-white shadow-2xl rounded-xl p-8 z-50 border border-gray-100 flex flex-row gap-8"
+                className="absolute right-1/2 -translate-x-1/2 top-12 w-[700px] bg-white shadow-2xl rounded-xl p-8 z-50 border border-gray-100 flex flex-row gap-8"
                 onMouseLeave={handleSolutionsLeave}
               >
                 {/* Solutions List */}
@@ -173,19 +173,21 @@ const Navbar = () => {
           <div className="relative group">
             <Button
               type="button"
-            onClick={handleLogout}
+              variant="danger"
+
+              onClick={handleLogout}
             >
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         ) : (
-          <a
-            href="/login"
-            style={{ backgroundColor: '#F6A507', color: '#fff' }}
-            className="font-semibold rounded-md px-6 py-2 transition"
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => navigate("/login")}
           >
             Login
-          </a>
+          </Button>
         )}
       </div>
 

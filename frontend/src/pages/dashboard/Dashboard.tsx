@@ -1,4 +1,4 @@
-import { FileText, BookOpen, Scale, MessageSquare } from "lucide-react";
+// Icon emojis used for dashboard features
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
@@ -7,25 +7,25 @@ export default function Dashboard() {
     {
       name: "Agreement Summary",
       description: "Quickly understand key points of contracts and agreements.",
-      icon: FileText,
+      icon: "📄",
       path: "/dashboard/role-selection",
     },
     {
       name: "Process Agreement",
       description: "Step-by-step guidance for drafting and executing agreements.",
-      icon: BookOpen,
+      icon: "📝",
       path: "/dashboard/process/summary",
     },
     {
       name: "Case Summary",
       description: "Search, review, and analyze landmark legal cases.",
-      icon: Scale,
+      icon: "⚖️",
       path: "/dashboard/case/case-details",
     },
     {
       name: "Chatbot Assistant",
       description: "Ask questions and get instant legal insights.",
-      icon: MessageSquare,
+      icon: "🤖",
       path: "/chatbot",
     },
   ];
@@ -52,7 +52,7 @@ export default function Dashboard() {
             className="cursor-pointer border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all bg-white"
           >
             <div className="flex items-center gap-4 mb-4">
-              <feature.icon className="w-10 h-10 text-[#CDA047]" />
+              <span className="text-3xl">{feature.icon}</span>
               <h2 className="text-xl font-semibold text-gray-900">
                 {feature.name}
               </h2>

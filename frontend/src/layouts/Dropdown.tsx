@@ -93,7 +93,35 @@ const LanguageDropdown = ({ show, onEnter, onLeave, onChange }: {
     </AnimatePresence>
 );
 
+
 const solutionsDropdown = [
+  {
+    title: "Agreement Summary",
+    desc: "Instantly grasp the main points, obligations, and risks in any contract or agreement.",
+    icon: "📄",
+    href: "/dashboard/role-selection",
+  },
+  {
+    title: "Process Agreement",
+    desc: "Guided, step-by-step workflow for drafting, reviewing, and executing agreements with confidence.",
+    icon: "📝",
+    href: "/dashboard/process/summary",
+  },
+  {
+    title: "Case Summary",
+    desc: "Effortlessly search, review, and analyze landmark legal cases for actionable insights.",
+    icon: "⚖️",
+    href: "/dashboard/case/case-details",
+  },
+  {
+    title: "Chatbot Assistant",
+    desc: "Ask legal questions and receive instant, AI-powered guidance and explanations.",
+    icon: "🤖",
+    href: "/chatbot",
+  },
+];
+
+const solutionsDropdown2 = [
   {
     title: "Citizens",
     desc: "Get simple, clear legal summaries and actionable advice for everyday agreements.",

@@ -41,8 +41,7 @@ jobs:
         with:
           name: python-app
           path: |
-            .
-            !venv/
+            ai_model/
 
   deploy:
     runs-on: ubuntu-latest
