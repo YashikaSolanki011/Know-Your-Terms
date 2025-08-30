@@ -44,10 +44,6 @@ app.get("/api/v1/active", (req: Request, res: Response) => {
   );
 });
 
-// API routes - must come before static file serving
-// Example: app.use('/api/users', usersRouter);
-
-
 // Serve static files from React build
 const buildPath = path.join(__dirname, '../../frontend/dist');
 app.use(express.static(buildPath));

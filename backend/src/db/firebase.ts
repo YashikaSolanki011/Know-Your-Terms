@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 import admin from 'firebase-admin';
 dotenv.config();
 
-const serviceAccount = require("./serviceAccountKey.json");
+// const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG1 || "{}");
 
 if (!serviceAccount) {
   throw new Error("Missing FIREBASE_SERVICE_ACCOUNT_KEY ");
