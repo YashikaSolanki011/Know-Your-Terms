@@ -41,7 +41,7 @@ export default function HomeHeader() {
         {/* CTA Buttons */}
         <div className="flex flex-row gap-4 justify-center mb-8 mt-4">
           <Link
-            to="/analyze"
+            to="/dashboard"
             className="bg-[#F6A507] hover:bg-[#d18c06] text-white font-bold px-8 py-3 rounded-full shadow-lg transition text-lg tracking-wide border-2 border-[#CDA047]"
           >
             Analyze My Document →

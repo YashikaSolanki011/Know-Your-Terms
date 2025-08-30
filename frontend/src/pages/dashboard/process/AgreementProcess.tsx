@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 
 function Spinner({ loading }: { loading: boolean }) {
     return (
-        <div className="flex justify-center items-center py-6 border bg-white border-gray-200">
+        <div className="flex max-w-6xl mx-auto justify-center items-center py-6 border bg-white border-gray-200">
             <div className="w-8 h-8 border-4 border-[#F6A507] border-t-transparent rounded-full animate-spin" role="status" aria-label="Loading"></div>
             {loading && <span className="ml-2 text-gray-600">Loading process details...</span>}
         </div>
@@ -35,6 +35,7 @@ export default function AgreementProcess() {
                 return;
             }
             const response: any = await dispatch(agreementProcessAsync({ uid: user.uid , processType: query})).unwrap();
+            console.log("Response:", response);
 
             if (response?.statusCode === 200 || response?.success === true) {
                 setShowDetails(response.data);
@@ -52,7 +53,7 @@ export default function AgreementProcess() {
     };
 
     return (
-        <div className="min-h-screen p-6 pt-28">
+        <div className="min-h-screen max-w-6xl mx-auto p-6 pt-28">
         {/* Header */}
         <header className="mb-8 text-center">
             <h1 className="text-4xl font-bold text-black flex items-center justify-center gap-2 tracking-tight">
@@ -92,7 +93,7 @@ export default function AgreementProcess() {
         {/* Results */}
         {loading ? <Spinner loading={loading} /> : (
             showDetails && (
-                <div className="border border-[#f3e9d2] rounded-2xl shadow-md bg-white max-h-[63vh] overflow-y-auto max-w-5xl mx-auto space-y-6">
+                <div className="border border-[#f3e9d2] rounded-2xl shadow-md bg-white max-h-[63vh] overflow-y-auto max-w-6xl mx-auto space-y-6">
                     {/* Header */}
                     <div className="p-8 border-b border-[#f3e9d2] bg-[#fdf6ee]">
                         <h1 className="text-xl md:text-2xl font-bold text-black">
@@ -129,8 +130,20 @@ export default function AgreementProcess() {
                                 <span className="text-[#CDA047]">▌</span> Create Agreement Online
                             </h2>
                             <div className="flex flex-col gap-2">
-                                {showDetails.creationLinks.map((link: any, i: number) => (
-                                    link.url ? (
+                                {showDetails.creationLinks.map((link: any, i: number) => {
+                                    // If url is 'N/A' or missing, show as plain text with disclaimer if present
+                                    if (!link.url || link.url === 'N/A') {
+                                        return (
+                                            <div key={i} className="text-gray-900">
+                                                <span className="font-semibold">{link.name || link.document}</span>
+                                                {link.disclaimer && (
+                                                    <div className="text-xs text-gray-500 mt-1 italic">{link.disclaimer}</div>
+                                                )}
+                                            </div>
+                                        );
+                                    }
+                                    // Otherwise, render as a link
+                                    return (
                                         <a
                                             key={i}
                                             href={link.url}
@@ -139,13 +152,12 @@ export default function AgreementProcess() {
                                             className="text-[#F6A507] hover:underline font-medium"
                                         >
                                             {link.name || link.document}
+                                            {link.disclaimer && (
+                                                <span className="block text-xs text-gray-500 mt-1 italic">{link.disclaimer}</span>
+                                            )}
                                         </a>
-                                    ) : (
-                                        <div key={i} className="text-gray-900">
-                                            <span className="font-semibold">{link.document}:</span> {link.link}
-                                        </div>
-                                    )
-                                ))}
+                                    );
+                                })}
                             </div>
                         </section>
                     )}
