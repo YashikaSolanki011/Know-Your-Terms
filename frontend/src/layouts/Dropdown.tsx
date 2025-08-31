@@ -121,27 +121,6 @@ const solutionsDropdown = [
   },
 ];
 
-const solutionsDropdown2 = [
-  {
-    title: "Citizens",
-    desc: "Get simple, clear legal summaries and actionable advice for everyday agreements.",
-    icon: "🧑‍🤝‍🧑",
-    href: "/citizen-solutions"
-  },
-  {
-    title: "Small Business Owners",
-    desc: "Professional compliance checks, risk analysis, and improvement tips for business contracts.",
-    icon: "🧑‍💼",
-    href: "/business-solutions"
-  },
-  {
-    title: "Students & Professionals",
-    desc: "Understand internships, job offers, and freelance contracts with student-friendly guidance.",
-    icon: "🎓",
-    href: "/student-solutions"
-  }
-];
-
 export { LanguageDropdown, solutionsDropdown };
 
 

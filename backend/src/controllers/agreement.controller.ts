@@ -32,15 +32,24 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(file.path), file.originalname);
 
-    const agreementText = await axios.post('http://127.0.0.1:5000/uploads', formData, {
+    // local testing
+    // const agreementText = await axios.post(`${process.env.AI_MODEL_URL}/uploads`, formData, {
+    //     headers: {
+    //         ...formData.getHeaders(),
+    //     },
+    // });
+
+    const modelResponse = await axios.post(`${process.env.AI_MODEL_URL}/uploads`, formData, {
         headers: {
             ...formData.getHeaders(),
         },
     });
 
-    // console.log(agreementText);
+    let agreementText = modelResponse.data.extracted_text.replace(/\\n/g, '\n');
 
-    if (!agreementText || !agreementText.data) {
+    // console.log("Agreement text extracted ", agreementText);
+
+    if (!agreementText || agreementText.trim() === '') {
         await createAuditLog({
             uid: uid || 'unknown',
             action: 'AGREEMENT_SUMMARY',

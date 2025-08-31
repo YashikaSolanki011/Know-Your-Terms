@@ -11,11 +11,15 @@ if (!geminiAPIKey) {
 }
 
 export async function summarizeAgreementWithGemini(prompt: string): Promise<any> {
+
+    // Ensure prompt is plain text (not JSON or stringified object)
+    // The controller should pass only plain agreement text in the prompt
     const requestBody = {
-        contents: [{ parts: [{ text: prompt }]}]
+        contents: [{ parts: [{ text: String(prompt) }]}]
     };
 
-    try {   
+    try {
+        // Send plain text prompt to Gemini API
         const response = await axios.post(
             `${geminiApiUrl}?key=${geminiAPIKey}`,
             requestBody,
