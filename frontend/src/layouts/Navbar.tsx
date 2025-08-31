@@ -6,7 +6,7 @@ import i18n from "../utils/i18n";
 import { useTranslation } from "react-i18next";
 import {LanguageDropdown, solutionsDropdown} from "./Dropdown";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { ArrowRight } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { getCurrentUserAsync } from "../store/authSlice";
 import Button from "../components/common/Button";
 
@@ -153,10 +153,10 @@ const Navbar = () => {
                       href={item.href}
                       className="flex items-start gap-3 mb-2 cursor-pointer hover:bg-gradient-to-br hover:from-[#e5e7eb] hover:via-[#f3f4f6] hover:to-[#f9fafb] group-hover:text-[#CDA047] hover:text-[#CDA047] p-3 rounded-lg transition group"
                     >
-                      <span className="text-xl group-hover:scale-110 transition group-hover:text-[#CDA047]">{item.icon}</span>
-                      <div className="group-hover:text-[#CDA047] hover:text-[#CDA047]">
-                        <div className="font-semibold text-gray-900 group-hover:text-[#CDA047] hover:text-[#CDA047]">{item.title}</div>
-                        <div className="text-gray-500 text-sm group-hover:text-[#CDA047] hover:text-[#CDA047]">{item.desc}</div>
+                      <span className="text-xl group-hover:scale-110 transition">{item.icon}</span>
+                      <div className="group-hover:text-[#CDA047]">
+                        <div className="font-semibold text-gray-900 ">{item.title}</div>
+                        <div className="text-gray-500 text-sm ">{item.desc}</div>
                       </div>
                     </a>
                   ))}
@@ -177,7 +177,7 @@ const Navbar = () => {
 
               onClick={handleLogout}
             >
-              Get Started <ArrowRight className="ml-2 h-4 w-4" />
+              Logout <LogOut className="ml-2 h-4 w-4" />
             </Button>
           </div>
         ) : (
