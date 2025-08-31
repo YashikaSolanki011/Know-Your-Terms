@@ -143,13 +143,13 @@ const CasesList: React.FC = () => {
                                 </p>
                                 <p className="text-sm text-gray-500">{caseItem.citation}</p>
                             </div>
-                            <button
+                            <Button type="submit"
                                 onClick={() => { handleCaseSummary(caseItem.tid)}}
-                                className={`mt-3 md:mt-0 px-4 py-2 bg-[#F6A507] ${detailLoading ? 'opacity-50 cursor-not-allowed' : 'bg-[#F6A507]'} hover:bg-[#d18c06] text-white rounded-lg font-medium transition border-2 border-[#CDA047]`}
+                                variant="primary"
                                 disabled={detailLoading}
                             >
                                 View Summary 
-                            </button>
+                            </Button>
                             {/* <Button type="submit" size="lg"
                                 onClick={() => { handleCaseSummary(caseItem.tid)}}
                                 loading={detailLoading}

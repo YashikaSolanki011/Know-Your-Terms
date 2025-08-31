@@ -93,25 +93,32 @@ const LanguageDropdown = ({ show, onEnter, onLeave, onChange }: {
     </AnimatePresence>
 );
 
+
 const solutionsDropdown = [
   {
-    title: "Citizens",
-    desc: "Get simple, clear legal summaries and actionable advice for everyday agreements.",
-    icon: "🧑‍🤝‍🧑",
-    href: "/citizen-solutions"
+    title: "Agreement Summary",
+    desc: "Instantly grasp the main points, obligations, and risks in any contract or agreement.",
+    icon: "📄",
+    href: "/dashboard/role-selection",
   },
   {
-    title: "Small Business Owners",
-    desc: "Professional compliance checks, risk analysis, and improvement tips for business contracts.",
-    icon: "🧑‍💼",
-    href: "/business-solutions"
+    title: "Process Agreement",
+    desc: "Guided, step-by-step workflow for drafting, reviewing, and executing agreements with confidence.",
+    icon: "📝",
+    href: "/dashboard/process/summary",
   },
   {
-    title: "Students & Professionals",
-    desc: "Understand internships, job offers, and freelance contracts with student-friendly guidance.",
-    icon: "🎓",
-    href: "/student-solutions"
-  }
+    title: "Case Summary",
+    desc: "Effortlessly search, review, and analyze landmark legal cases for actionable insights.",
+    icon: "⚖️",
+    href: "/dashboard/case/case-details",
+  },
+  {
+    title: "Chatbot Assistant",
+    desc: "Ask legal questions and receive instant, AI-powered guidance and explanations.",
+    icon: "🤖",
+    href: "/chatbot",
+  },
 ];
 
 export { LanguageDropdown, solutionsDropdown };

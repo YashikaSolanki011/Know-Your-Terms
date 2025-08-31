@@ -42,7 +42,7 @@ export default function HomeHeader() {
         <div className="flex flex-row gap-4 justify-center mb-8 mt-4">
           <Link
             to="/dashboard"
-            className="bg-[#F6A507] hover:bg-[#d18c06] text-white font-bold px-8 py-3 rounded-full shadow-lg transition text-lg tracking-wide border-2 border-[#CDA047]"
+            className="bg-gradient-to-br from-[#e5e7eb] via-[#f3f4f6] to-[#f9fafb] text-gray-800 hover:bg-[#e0e7ef] focus:ring-[#b1b4b6] border border-[#b1b4b6] hover:from-[#e0e7ef] hover:via-[#f3f4f6] hover:to-[#f9fafb] font-bold px-8 py-3 rounded-full shadow-lg transition text-lg tracking-wide"
           >
             Analyze My Document →
           </Link>

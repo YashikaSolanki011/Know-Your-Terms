@@ -108,10 +108,12 @@ export default function SummaryPage({ targetGroup }: Props) {
             } else {
                 toast.error(response?.message || "Failed to generate summary");
                 setLoading(false);
+                setShowUpload(true);
             }
         } catch (error) {
             toast.error("Failed to summarize the document. Please try again later.");
             setLoading(false);
+            setShowUpload(true);
         } finally {
             setLoading(false);
         }
