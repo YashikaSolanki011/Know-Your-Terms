@@ -60,7 +60,7 @@ const Login: React.FC = () => {
       dispatch(getCurrentUserAsync());
       toast.success("Login successful!");
       setLoading(false);
-      navigate("/help");
+      navigate("/dashboard");
     } catch (error: any) {
       setLoading(false);
       setErrors({ general: error.message });
@@ -94,14 +94,14 @@ const Login: React.FC = () => {
         } catch (regErr: any) {
           // If already exists, ignore; else show error
           if (regErr?.message && !regErr.message.includes('already exists')) {
-            toast.error(regErr.message || 'Failed to register user profile.');
+            toast.error(regErr.message || 'Failed to login user.');
             // Optionally return here
           }
           setGoogleLoading(false);
         }
         dispatch(getCurrentUserAsync());
         setGoogleLoading(false);
-        navigate("/help");
+        navigate("/dashboard");
       } else {
         toast.error("Google login failed. No user information available.");
       }

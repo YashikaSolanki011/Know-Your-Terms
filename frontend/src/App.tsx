@@ -8,30 +8,43 @@ import Footer from './layouts/Footer';
 import Navbar from './layouts/Navbar';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
-import RoleSelection from './pages/dashboard/RoleSelection';
-import SummaryPage from './pages/dashboard/SummaryPage';
-import CitizenPage from './components/SummaryComponents/CitizenSummary';
-import StudentPage from './components/SummaryComponents/StudentPage';
-import BusinessPage from './components/SummaryComponents/BusinessPage';
+import RoleSelection from './pages/dashboard/agreement/RoleSelection';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { getCurrentUserAsync } from './store/authSlice';
+import SummaryPage from './pages/dashboard/agreement/SummaryPage';
+import { useLocation } from 'react-router-dom';
+import CasesList from './pages/dashboard/case/CasesList';
+import AgreementProcess from './pages/dashboard/process/AgreementProcess';
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  
+  console.log("Hello", user, isAuthenticated);
+
   useEffect(() => {
     dispatch(getCurrentUserAsync());
   }, [dispatch]);
-  
-  console.log("Hello", user, isAuthenticated);
+
+  // Helper to extract targetGroup from query param and map to category
+  function SummaryPageWithTargetGroup() {
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const targetGroup = params.get('targetGroup');
+    // Map role id to category prop
+    let category: 'citizen' | 'student' | 'business_owner' = 'student';
+    if (targetGroup === 'citizen') category = 'citizen';
+    else if (targetGroup === 'business') category = 'business_owner';
+    else if (targetGroup === 'student') category = 'student';
+    return <SummaryPage targetGroup={category} />;
+  }
 
   return (
     <>
       <ToastContainer
-        position="bottom-right"  // This will show the toast in the center of the screen
-        autoClose={3000}  // Toast will disappear after 3 seconds
+        position="bottom-right"
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -53,11 +66,11 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/active" element={<div>frontend active</div>} />
-            <Route path="/role-selection" element={<RoleSelection />} />
-            <Route path="/summary" element={<SummaryPage />} />
-            <Route path="/citizen" element={<CitizenPage />} />
-            <Route path="/student" element={<StudentPage />} />
-            <Route path="/business" element={<BusinessPage />} />
+            <Route path='/dashboard' element={isAuthenticated ? <Dashboard /> : <Login />} />
+            <Route path="/dashboard/role-selection" element={isAuthenticated ? <RoleSelection /> : <Login />} />
+            <Route path="/dashboard/agreement/summary" element={isAuthenticated ? <SummaryPageWithTargetGroup /> : <Login />} />
+            <Route path="/dashboard/case/case-details" element={isAuthenticated ? <CasesList /> : <Login />} />
+            <Route path="/dashboard/process/summary" element={isAuthenticated ? <AgreementProcess /> : <Login />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
