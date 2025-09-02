@@ -56,11 +56,11 @@ export default function CaseSummary({ caseItem }: { caseItem: any }) {
           <section>
             <h2 className="font-semibold text-black text-lg mb-2">Parties</h2>
             <p className="text-gray-900">
-              <span className="font-semibold text-[#F6A507]">Petitioner:</span> {dummySummary.parties?.petitioner || (typeof dummySummary.parties === 'string' ? dummySummary.parties : '')}
+              <span className="font-semibold text-[#F6A507]">Case Between:</span> {dummySummary.parties?.petitioner || (typeof dummySummary.parties === 'string' ? dummySummary.parties : '')}
             </p>
-            <p className="text-gray-900">
-              <span className="font-semibold text-[#F6A507]">Respondent:</span> {dummySummary.parties?.respondent || ''}
-            </p>
+            {/* <p className="text-gray-900">
+              <span className="font-semibold text-[#F6A507]">Respondent:</span> {dummySummary.parties?.respondent || 'N/A'}
+            </p> */}
           </section>
 
           <section>
@@ -71,8 +71,13 @@ export default function CaseSummary({ caseItem }: { caseItem: any }) {
           <section>
             <h2 className="font-semibold text-black text-lg mb-2">Issues</h2>
             <ul className="list-disc ml-6 text-gray-900 leading-relaxed">
-              {issues.map((issue: string, i: number) => (
-                <li key={i}>{issue}</li>
+              {(typeof dummySummary.issues === "string"
+                ? dummySummary.issues.split('\n')
+                : issues
+              ).map((issue: string, i: number) => (
+                <li key={i}>
+                  {issue.replace(/^\d+\.\s*/, "")}
+                </li>
               ))}
             </ul>
           </section>
@@ -110,9 +115,22 @@ export default function CaseSummary({ caseItem }: { caseItem: any }) {
           <section>
             <h2 className="font-semibold text-black text-lg mb-2">Legal Principles</h2>
             <ul className="list-disc ml-6 text-gray-900 leading-relaxed">
-              {principles.map((p: string, i: number) => (
-                <li key={i}>{p}</li>
-              ))}
+              {(typeof dummySummary.principles === "string"
+                ? dummySummary.principles.split('\n')
+                : principles
+              ).map((p: string, i: number) => {
+                // Extract bolded part between ** and the rest
+                const match = p.match(/\*\*(.*?)\*\*\:?\s*(.*)/);
+                if (match) {
+                  return (
+                    <li key={i}>
+                      <span className="font-bold">{match[1]}</span>
+                      {match[2] ? `: ${match[2]}` : ""}
+                    </li>
+                  );
+                }
+                return <li key={i}>{p}</li>;
+              })}
             </ul>
           </section>
 
