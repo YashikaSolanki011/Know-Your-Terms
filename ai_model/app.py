@@ -20,13 +20,19 @@ classifier = pipeline(
 
 POSITIVE_LABELS = [
     "agreement", "legal contract", "rental agreement", "lease agreement",
-    "service agreement", "tenant-landlord agreement", "terms and conditions"
+    "service agreement", "tenant-landlord agreement", "terms and conditions",
+    "offer letter", "internship agreement", "employment contract",
+    "student agreement", "job offer", "internship terms"
 ]
+
 
 SECTION_CUES = [
     "agreement", "security deposit", "rental period", "payment terms",
     "termination", "arbitration", "jurisdiction",
-    "witness", "signatory", "governing law", "parties", "definitions"
+    "witness", "signatory", "governing law", "parties", "definitions",
+    "probation period", "internship duration", "performance", 
+    "salary", "compensation", "notice period", "work expectations",
+    "attendance", "leaves", "certificate", "offer letter"
 ]
 
 def safe_join_text(parts):
@@ -52,6 +58,7 @@ def classify_agreement(text):
 
     chunks = chunk_text(text, max_words=300)
     details["chunks"] = len(chunks)
+
     votes, per_chunk_scores = 0, []
     CHUNK_THRESHOLD = 0.5
 
@@ -89,7 +96,6 @@ def extract_pdf(file_stream):
             return safe_join_text([p.extract_text() for p in pdf.pages])
     except Exception:
         try:
-            file_stream.seek(0)
             doc = fitz.open(stream=file_stream.read(), filetype="pdf")
             texts = []
             for p in doc:
@@ -102,7 +108,6 @@ def extract_pdf(file_stream):
 
 def extract_docx(file_stream):
     try:
-        file_stream.seek(0)
         doc = docx.Document(io.BytesIO(file_stream.read()))
         return "\n".join(p.text for p in doc.paragraphs if p.text)
     except Exception:
@@ -110,7 +115,6 @@ def extract_docx(file_stream):
 
 def extract_image(file_stream):
     try:
-        file_stream.seek(0)
         img = Image.open(file_stream).convert("RGB")
         return pytesseract.image_to_string(img)
     except Exception:
