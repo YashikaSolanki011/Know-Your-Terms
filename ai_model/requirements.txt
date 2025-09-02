@@ -10,8 +10,8 @@ PyMuPDF==1.24.7
 pdfkit==1.0.0
 html2docx==1.6.0
 sumy==0.11.0
-transformers
 --extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.3.0+cpu
-reportlab
-gunicorn
+torch==2.6.0+cpu
+transformers==4.41.1
+reportlab==4.0.8
+gunicorn==21.2.0

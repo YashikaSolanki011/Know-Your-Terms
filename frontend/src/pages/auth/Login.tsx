@@ -133,33 +133,33 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="flex w-full max-w-4xl shadow-2xl rounded-2xl overflow-hidden border border-[#e6e1d5]">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f7fa]">
+      <div className="flex w-full max-w-4xl shadow-2xl rounded-2xl overflow-hidden border border-[#e0e3ef] bg-white">
         
         {/* Left: Illustration/Brand */}
-        <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-[#fffbe6] p-10">
+        <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-[#e5e7eb] p-10">
           <img
-            src="https://www.svgrepo.com/show/499964/law-legal-justice-10.svg"
-            alt="Legal Platform Logo"
-            className="h-24 w-24 object-contain mb-6"
+            src="/logo.png"
+            alt="Know Your Terms"
+            className="h-36 w-36 object-contain mb-6"
           />
-          <h2 className="text-3xl font-bold text-[#CDA047] mb-2 text-center">
+          <h2 className="text-3xl font-bold text-black mb-2 text-center">
             Welcome Back!
           </h2>
-          <p className="text-lg text-black/80 text-center max-w-xs">
-            Sign in to your account and simplify your legal journey with
+          <p className="text-lg text-gray-700 text-center max-w-xs">
+            Login to your account and simplify your legal journey with
             AI-powered document analysis.
           </p>
           <img src={login_svg} alt="Legal Illustration" className="mt-8 w-40" />
         </div>
 
         {/* Right: Login Form */}
-        <div className="w-full md:w-1/2 bg-white p-8 md:p-4 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 bg-[#f9fafb] p-8 md:p-6 flex flex-col justify-center border-l border-[#e0e3ef]">
           <div className="mb-6 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-1">
+            <h2 className="text-2xl font-bold text-black mb-1">
               Welcome Back!
             </h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-700 text-sm">
               Please login to your account
             </p>
           </div>
@@ -233,21 +233,30 @@ const Login: React.FC = () => {
               </Link> */}
             </div>
 
-            <Button type="submit" className="w-full" size="lg" loading={loading}>
-              {/* circular loader */}
-               Login
+            <Button type="submit" className="w-full bg-gradient-to-br from-[#e5e7eb] via-[#f3f4f6] to-[#f9fafb] text-[#1a237e] font-bold text-lg rounded-full shadow-lg transition border border-[#b1b4b6] hover:bg-[#e0e7ef]" size="lg" loading={loading}>
+              Login
             </Button>
-            <p className="text-center text-sm text-black mt-4">
+            <p className="text-center text-sm text-gray-700 mt-4">
               Don't have an account?{" "}
               <Link
                 to="/register"
-                className="font-bold text-[#F6A507] hover:underline"
+                className="font-bold text-black hover:underline"
               >
                 Create one
               </Link>
             </p>
           </form>
+
+          <div className="text-left mt-4">
+            <p className="text-sm text-gray-600">Test Account:</p>
+            <p className="text-sm text-gray-800">Email: knowyourterms@gmail.com</p>
+            <p className="text-sm text-gray-800">Password: knowyourterms</p>
+          </div>
         </div>
+      </div>
+      {/* Test account credentials */}
+      <div className="flex justify-left items-left mt-4">
+
       </div>
     </div>
   );

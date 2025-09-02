@@ -7,6 +7,7 @@ import Button from '../../components/common/Button';
 import { registerAsync } from '../../store/authSlice';
 import { useAppDispatch } from '../../hooks/redux';
 import { toast } from 'react-toastify';
+import signup from "../../assets/signup.svg"
 
 const Register: React.FC = () => {
  
@@ -92,26 +93,29 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="flex w-full max-w-4xl shadow-2xl rounded-2xl overflow-hidden border border-[#e6e1d5]">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f7fa]">
+      <div className="flex w-full max-w-4xl shadow-2xl rounded-2xl overflow-hidden border border-[#e0e3ef] bg-white">
         {/* Left: Illustration/Brand */}
-        <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-[#fffbe6] p-10">
-          <img src="https://www.svgrepo.com/show/499964/law-legal-justice-10.svg" alt="Legal Platform Logo" className="h-24 w-24 object-contain mb-6" />
-          <h2 className="text-3xl font-bold text-[#CDA047] mb-2 text-center">Create Your Account</h2>
-          <p className="text-lg text-black/80 text-center max-w-xs">
+        <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-[#e5e7eb] p-10">
+          <img src="/logo.png" alt="Know Your Terms Logo" className="h-36 w-36 object-contain mb-6" />
+          <h2 className="text-3xl font-bold text-black mb-2 text-center">Create Your Account</h2>
+          <p className="text-lg text-gray-700 text-center max-w-xs">
             Register to access AI-powered legal document analysis and more.
           </p>
-          <img src="https://www.svgrepo.com/show/499963/law-legal-justice-9.svg" alt="Legal Illustration" className="mt-8 w-40" />
+          <img src={signup} alt="Legal Illustration" className="mt-8 w-40" />
         </div>
         {/* Right: Register Form */}
-        <div className="w-full md:w-1/2 bg-white p-8 md:p-6 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 bg-[#f9fafb] p-8 md:p-6 flex flex-col justify-center border-l border-[#e0e3ef]">
           <div className="flex flex-col items-center mb-6">
             <img src="https://www.svgrepo.com/show/499964/law-legal-justice-10.svg" alt="Legal Platform Logo" className="h-14 w-14 object-contain md:hidden mb-4" />
-            <h2 className="text-2xl md:text-3xl font-bold text-[#CDA047] mb-2">Sign up Know your terms</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">Sign up Know your terms</h2>
+            <p className="text-gray-700 text-sm">
+              Please sign up for your account
+            </p>
           </div>
           <form className="space-y-6" onSubmit={handleSubmit}>
             {errors.general && (
-              <div className="bg-[#fff8e1] border-l-4 border-[#CDA047] text-[#CDA047] px-4 py-3 rounded-lg text-sm shadow-sm mb-2">
+              <div className="bg-[#e8eaf6] border-l-4 border-[#1a237e] text-[#1a237e] px-4 py-3 rounded-lg text-sm shadow-sm mb-2">
                 <div className="flex items-center">
                   <span className="mr-2">⚠️</span>
                   {errors.general}
@@ -268,25 +272,25 @@ const Register: React.FC = () => {
             <Button
               type="submit"
               loading={loading}
-              className="w-full bg-[#CDA047] hover:bg-[#b38a3e] text-black font-bold text-lg rounded-full shadow-lg transition border border-[#CDA047]"
+              className="w-full bg-gradient-to-br from-[#e5e7eb] via-[#f3f4f6] to-[#f9fafb] text-[#1a237e] font-bold text-lg rounded-full shadow-lg transition border border-[#b1b4b6] hover:bg-[#e0e7ef]"
               size="lg"
             >
               Create Account
             </Button>
             <div className="text-center">
-              <p className="text-sm text-black">
+              <p className="text-sm text-gray-700">
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-bold text-[#CDA047] hover:underline"
+                  className="font-bold text-black hover:underline"
                 >
                   Sign in here
                 </Link>
               </p>
             </div>
             {/* Government Disclaimer */}
-            <div className="mt-6 pt-4 border-t border-[#e6e1d5]">
-              <p className="text-xs text-black/70 text-center">
+            <div className="mt-6 pt-4 border-t border-[#e0e3ef]">
+              <p className="text-xs text-gray-600 text-center">
                 This is a secure government portal. By registering, you agree to comply with 
                 data protection regulations and official usage policies.
               </p>
