@@ -17,11 +17,11 @@ import { useLocation } from 'react-router-dom';
 import CasesList from './pages/dashboard/case/CasesList';
 import AgreementProcess from './pages/dashboard/process/AgreementProcess';
 import Dashboard from './pages/dashboard/Dashboard';
+import Chatbot from './pages/home/Chatbot';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  console.log("Hello", user, isAuthenticated);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getCurrentUserAsync());
@@ -74,6 +74,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
+        <Chatbot />
         <Footer />
       </div>
     </>
