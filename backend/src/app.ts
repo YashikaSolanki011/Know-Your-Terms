@@ -56,10 +56,6 @@ app.get("/api/v1/active", (req: Request, res: Response) => {
 //   res.sendFile(path.join(buildPath, 'index.html'));
 // });
 
-
-
-
-
 // Centralized error handler
 const errorHandler: ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
   if (err instanceof ApiError) {
