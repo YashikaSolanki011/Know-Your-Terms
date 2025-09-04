@@ -5,7 +5,7 @@ import { app } from "./app";
 
 const isFirebaseEnv =
   !!process.env.FUNCTIONS_EMULATOR ||
-  !!process.env.K_SERVICE ||
+  // !!process.env.K_SERVICE ||
   !!process.env.FIREBASE_CONFIG;
 
 if (isFirebaseEnv) {
