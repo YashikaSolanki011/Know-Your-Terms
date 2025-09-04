@@ -54,7 +54,7 @@ export default function HomeHeader() {
         <div className="relative w-full md:w-4/5 lg:w-2/3 aspect-square md:aspect-video rounded-2xl overflow-hidden shadow-xl border-4 border-[#f3e9d2] bg-white mx-auto">
           <video
             ref={videoRef}
-            src="/videos/video.mp4"
+            src="/Introduction.mp4"
             preload="auto"
             autoPlay
             loop
