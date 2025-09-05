@@ -77,11 +77,11 @@ const RoleSelection = () => {
       >
         <div className="mb-6">
           <div className="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-700 font-semibold text-xs tracking-wide uppercase shadow-sm bg-white">
-            User Role Selection
+            User Category Selection
           </div>
         </div>
         <h1 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-4">
-          Choose Your Role
+          Choose Your Category
         </h1>
         <p className="text-lg font-body text-gray-600 leading-relaxed max-w-2xl mx-auto">
           Select the option that best describes you to access personalized features and content.

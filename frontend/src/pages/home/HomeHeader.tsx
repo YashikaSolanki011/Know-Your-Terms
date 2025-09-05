@@ -1,12 +1,15 @@
 
 import { useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { Volume2, VolumeOff } from "lucide-react";
 import  { Badge } from "../../components/common/header";
 import { Link } from "react-router-dom";
 
+
 export default function HomeHeader() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [muted, setMuted] = useState(true);
+  const [videoLoading, setVideoLoading] = useState(true);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -52,6 +55,12 @@ export default function HomeHeader() {
 
         {/* Centered video section */}
         <div className="relative w-full md:w-4/5 lg:w-2/3 aspect-square md:aspect-video rounded-2xl overflow-hidden shadow-xl border-4 border-[#f3e9d2] bg-white mx-auto">
+          {/* Loader overlay */}
+          {videoLoading && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-white bg-opacity-70">
+              <Loader2 className="animate-spin w-12 h-12 text-[#a1a5ab]" />
+            </div>
+          )}
           <video
             ref={videoRef}
             src="/Introduction.mp4"
@@ -61,11 +70,13 @@ export default function HomeHeader() {
             muted={muted}
             playsInline
             className="w-full h-full object-cover"
+            onLoadedData={() => setVideoLoading(false)}
+            onCanPlay={() => setVideoLoading(false)}
           />
 
           <button
             onClick={toggleMute}
-            className="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-full p-2 shadow hover:bg-opacity-100 transition cursor-pointer border border-[#CDA047]"
+            className="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-full p-2 shadow hover:bg-opacity-100 transition cursor-pointer border border-[#CDA047] z-30"
             aria-label={muted ? "Unmute video" : "Mute video"}
           >
             {muted ? (
