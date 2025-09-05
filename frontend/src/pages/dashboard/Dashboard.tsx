@@ -11,7 +11,7 @@ export default function Dashboard() {
       path: "/dashboard/role-selection",
     },
     {
-      name: "Process Agreement",
+      name: "Agreement Process",
       description: "Step-by-step guidance for drafting and executing agreements.",
       icon: "📝",
       path: "/dashboard/process/summary",
