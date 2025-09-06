@@ -14,7 +14,7 @@ const router = Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/all-users", getAllUsers);
+router.get("/all-users", authenticate, getAllUsers);
 
 // Protected routes (require authentication)
 router.get("/user-profile", authenticate, getUserProfile);

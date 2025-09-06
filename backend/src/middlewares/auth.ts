@@ -25,6 +25,9 @@ export const authenticate = asyncHandler(async (req: Request, res: Response, nex
   
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
+    if(!decodedToken) {
+      throw new ApiError(401, 'You are not authorized to access this resource');
+    }
     req.user = {
       uid: decodedToken.uid,
       email: decodedToken.email,
