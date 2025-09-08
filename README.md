@@ -203,106 +203,13 @@ nano .env
 ```
 
 
-
-### 4. Google Cloud Setup
-```bash
-# Authenticate with Google Cloud
-gcloud auth login
-
-# Set your project
-gcloud config set project your-project-id
-
-# Enable required APIs
-gcloud services enable \
-  aiplatform.googleapis.com \
-  documentai.googleapis.com \
-  translate.googleapis.com \
-  firestore.googleapis.com \
-  cloudbuild.googleapis.com
-```
-
-### 5. Firebase Setup
-```bash
-# Login to Firebase
-firebase login
-
-# Initialize Firebase in your project
-firebase init
-
-# Select features: Firestore, Hosting, Functions
-```
-
-## 🏃‍♂️ Running the Application
-
-### Option 1: Development Mode (Recommended)
-```bash
-# Start backend server (Terminal 1)
-cd server
-npm run dev
-
-# Start frontend (Terminal 2)  
-cd client
-npm start
-```
-
-### Option 2: Docker Deployment
-```bash
-# Build and run with Docker Compose
-docker-compose up --build
-
-# Or build individually
-docker build -t knowyourterms-backend ./server
-docker build -t knowyourterms-frontend ./client
-```
-
-### Option 3: Production Deployment
-```bash
-# Build the application
-npm run build
-
-# Deploy to Firebase
-firebase deploy
-
-# Deploy to Google Cloud Run
-gcloud run deploy knowyourterms-api \
-  --source . \
-  --region asia-south1 \
-  --allow-unauthenticated
-```
-
-
-## 🚀 Deployment
-
-### 1. Frontend Deployment (Firebase Hosting)
-```bash
-# Build frontend
-cd client && npm run build
-
-# Deploy to Firebase
-firebase deploy --only hosting
-```
-
-### 2. Backend Deployment (Google Cloud Run)
-```bash
-# Deploy API service
-gcloud run deploy knowyourterms-api \
-  --source ./server \
-  --platform managed \
-  --region asia-south1 \
-  --allow-unauthenticated
-```
-
-### 3. Database Deployment (Firestore)
-```bash
-# Deploy Firestore rules
-firebase deploy --only firestore:rules
-```
-
-
-
 **🚀 Your KnowYourTerms instance is now running!** Visit `http://localhost:3000` to start using the application.
-# Project Links
-### KnowYourTerms <a href="https://knowyourterms.ecovix.online/">
+
+<hr/>
+
+## 🔭 Projects Link: [KnowYourTerms](https://knowyourterms.ecovix.online/)
+
+
 
 
 
