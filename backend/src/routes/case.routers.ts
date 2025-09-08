@@ -3,12 +3,13 @@ import {
     getCaseSummary,
     searchCases,
 } from "../controllers/case.controller";
+import { authenticate } from "../middlewares/auth";
 
 
 const router = Router();
 
 
-router.route("/search-cases").post(searchCases);
-router.route("/case-summary").post(getCaseSummary);
+router.route("/search-cases").post(authenticate, searchCases);
+router.route("/case-summary").post(authenticate, getCaseSummary);
 
 export default router;

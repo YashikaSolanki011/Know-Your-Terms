@@ -9,6 +9,11 @@ function Spinner({ loading, detailLoading }: { loading: boolean; detailLoading: 
         </div>
     );
 }
+
+function stripBoldTags(text: string) {
+  return text.replace(/<\/?b>/g, "");
+}
+
 import CaseDetail from "./CaseDetail";
 import { caseSummaryAsync, searchCaseAsync } from "../../../store/caseSlice";
 import { useAppDispatch } from "../../../hooks/redux";
@@ -137,7 +142,7 @@ const CasesList: React.FC = () => {
                         >
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div>
-                                <h3 className="font-semibold text-black">{caseItem.title}</h3>
+                                <h3 className="font-semibold text-black">{stripBoldTags(caseItem.title)}</h3>
                                 <p className="text-sm text-gray-700 mt-1">
                                 {caseItem.docsource} • {caseItem.publishdate}
                                 </p>

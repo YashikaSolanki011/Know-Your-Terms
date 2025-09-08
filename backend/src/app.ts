@@ -45,20 +45,16 @@ app.get("/api/v1/active", (req: Request, res: Response) => {
 });
 
 // Serve static files from React build
-const buildPath = path.join(__dirname, '../../frontend/dist');
-app.use(express.static(buildPath));
+// const buildPath = path.join(__dirname, '../../frontend/dist');
+// app.use(express.static(buildPath));
 
-app.use((req, res, next) => {
-  // Skip API routes
-  if (req.path.startsWith('/api')) {
-    return next();
-  }
-  res.sendFile(path.join(buildPath, 'index.html'));
-});
-
-
-
-
+// app.use((req, res, next) => {
+//   // Skip API routes
+//   if (req.path.startsWith('/api')) {
+//     return next();
+//   }
+//   res.sendFile(path.join(buildPath, 'index.html'));
+// });
 
 // Centralized error handler
 const errorHandler: ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {

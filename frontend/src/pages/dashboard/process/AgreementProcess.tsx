@@ -35,7 +35,6 @@ export default function AgreementProcess() {
                 return;
             }
             const response: any = await dispatch(agreementProcessAsync({ uid: user.uid , processType: query})).unwrap();
-            console.log("Response:", response);
 
             if (response?.statusCode === 200 || response?.success === true) {
                 setShowDetails(response.data);
