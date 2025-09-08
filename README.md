@@ -298,54 +298,6 @@ gcloud run deploy knowyourterms-api \
 firebase deploy --only firestore:rules
 ```
 
-## 🐛 Troubleshooting
-
-### Common Issues:
-
-1. **Authentication Errors**
-```bash
-gcloud auth application-default login
-```
-
-2. **Port Already in Use**
-```bash
-# Find and kill process
-lsof -ti:3000 | xargs kill
-```
-
-3. **Missing Dependencies**
-```bash
-# Clear cache and reinstall
-rm -rf node_modules package-lock.json
-npm install
-```
-
-4. **Firebase Permissions**
-```bash
-# Update Firebase rules
-firebase deploy --only firestore:rules
-```
-
-## 📊 Monitoring
-
-### Check Logs
-```bash
-# View Cloud Run logs
-gcloud logging read "resource.type=cloud_run_revision"
-
-# View Firebase logs
-firebase functions:log
-```
-
-### Monitor Performance
-```bash
-# Check API health
-curl http://localhost:5000/health
-
-# Monitor metrics
-gcloud monitoring dashboards create
-```
-
 
 
 **🚀 Your KnowYourTerms instance is now running!** Visit `http://localhost:3000` to start using the application.
