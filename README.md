@@ -63,10 +63,6 @@ KnowYourTerms addresses these challenges through a comprehensive AI-powered plat
 - **24/7 Availability**: Round-the-clock legal guidance and support
 - **Conversation History**: Save and revisit previous discussions
   
-# 🛠️Technical Approach
-
-<img width="1027" height="506" alt="image" src="https://github.com/user-attachments/assets/d4b8c217-34cb-4bb3-8b05-b8570e0072cf" />
-
 # 🛠️ How the system Works?
 
 
@@ -130,12 +126,9 @@ https://github.com/user-attachments/assets/a0c11d0f-83a5-43ab-9972-3085b51be375
 ### 🌐 **Frontend**  
 | Technology | Purpose |  
 |------------|---------|  
-| **React.js + TypeScript** | Dynamic, type-safe user interface |  
-| **Material-UI (MUI)** | Pre-built, accessible components |  
-| **Redux Toolkit** | State management for complex user flows |  
-| **Axios** | API communication with backend |  
-| **React Router** | Navigation and routing |  
-
+| **React.js + TypeScript** | Dynamic, type-safe user interface |     
+| **Tailwind CSS** | Navigation and routing |  
+|**Firbase**||
 ---
 
 ### ⚙️ **Backend**  
@@ -143,18 +136,18 @@ https://github.com/user-attachments/assets/a0c11d0f-83a5-43ab-9972-3085b51be375
 |------------|---------|  
 | **Node.js + Express.js** | RESTful API server and middleware |  
 | **Google Cloud Run** | Serverless container deployment |  
-| **Google API Gateway** | Secure, managed API endpoints |  
-| **JWT + Firebase Auth** | User authentication and authorization |  
+|**Flask**||
+|**Tailwind**||
 
 ---
 
-### 🤖 **AI/ML & Cloud Services**  
+### 🤖 **AI Model**  
 | Technology | Purpose |  
 |------------|---------|  
-| **Google Gemini API** | Core generative AI for legal analysis |  
-| **Google Document AI** | OCR and structured data extraction |  
-| **Vertex AI Vector Search** | RAG-based legal grounding (India Code, RBI, MCA) |  
-| **Google Translate API** | Real-time multilingual support |  
+| **NLP** |  |  
+| **Python** |  |  
+| **Open CV** |  |  
+| **TEnsorFlow** |  |  
 | **Google Cloud Natural Language** | Sentiment and entity analysis |  
 
 ---
@@ -163,36 +156,7 @@ https://github.com/user-attachments/assets/a0c11d0f-83a5-43ab-9972-3085b51be375
 | Technology | Purpose |  
 |------------|---------|  
 | **Firestore** | User data, session storage, and metadata |  
-| **Google Cloud Storage** | Temporary document processing storage |  
-| **BigQuery** | Analytics and usage metrics |  
-| **Vertex AI Matching Engine** | Vector database for legal clause embeddings |  
-
----
-
-### 🔧 **Development & DevOps**  
-| Technology | Purpose |  
-|------------|---------|  
-| **GitHub Actions** | CI/CD pipelines |  
-| **Docker** | Containerization of services |  
-| **Google Cloud Build** | Automated deployments |  
-| **Firebase Hosting** | Frontend deployment |  
-
----
-
-
-### 📡 **Real-Time Features**  
-| Technology | Purpose |  
-|------------|---------|  
-| **WebSockets** | Live notifications and chat |  
-| **Firebase Realtime Database** | Dynamic updates for collaborative features |  
-
----
-
-### 🔄 **Asynchronous Processing**  
-| Technology | Purpose |  
-|------------|---------|  
-| **Google Cloud Tasks** | Background job management |  
-| **Google Pub/Sub** | Event-driven architecture |  
+| **Google Cloud Storage** | Temporary document processing storage |   
 
 ---
 
@@ -238,25 +202,7 @@ cp .env.example .env
 nano .env
 ```
 
-**Required Environment Variables:**
-```env
-# Google Cloud
-GCP_PROJECT_ID=your-project-id
-GCP_LOCATION=asia-south1
 
-# Gemini AI
-GEMINI_API_KEY=your-gemini-api-key
-
-# Firebase
-FIREBASE_PROJECT_ID=your-firebase-project
-FIREBASE_API_KEY=your-firebase-key
-
-# Application
-NODE_ENV=development
-PORT=3000
-CLIENT_URL=http://localhost:3000
-SERVER_URL=http://localhost:5000
-```
 
 ### 4. Google Cloud Setup
 ```bash
@@ -324,55 +270,6 @@ gcloud run deploy knowyourterms-api \
   --allow-unauthenticated
 ```
 
-## 🧪 Testing the Application
-
-### Run Tests
-```bash
-# Run all tests
-npm test
-
-# Run frontend tests
-cd client && npm test
-
-# Run backend tests  
-cd server && npm test
-
-# Run e2e tests
-npm run test:e2e
-```
-
-### Test API Endpoints
-```bash
-# Example: Analyze a document
-curl -X POST http://localhost:5000/api/analyze \
-  -F "file=@./sample-docs/rental-agreement.pdf" \
-  -F "userType=citizen"
-```
-
-
-## 🔑 API Keys Setup
-
-### 1. Gemini API Key
-```bash
-# Create API key in Google AI Studio
-# https://aistudio.google.com/
-
-# Add to environment variables
-echo "GEMINI_API_KEY=your-api-key" >> .env
-```
-
-### 2. Firebase Configuration
-```javascript
-// Get config from Firebase console
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
-};
-```
 
 ## 🚀 Deployment
 
