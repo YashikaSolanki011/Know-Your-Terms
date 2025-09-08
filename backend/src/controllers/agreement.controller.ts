@@ -32,18 +32,11 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(file.path), file.originalname);
 
-    // local testing
     const modelResponse = await axios.post(`${process.env.AI_MODEL_URL}/uploads`, formData, {
         headers: {
             ...formData.getHeaders(),
         },
     });
-
-    // const modelResponse = await axios.post(`${process.env.AI_MODEL_URL}/uploads`, formData, {
-    //     headers: {
-    //         ...formData.getHeaders(),
-    //     },
-    // });
 
     let agreementText = modelResponse.data.extracted_text.replace(/\\n/g, '\n');
 
@@ -165,11 +158,11 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
 
                 {
                 "title": "string (short, professional document title e.g., 'Vendor Service Agreement – IT Support')",
-                "about": "string (short summary of what this document/contract is about)",
+                "about": "string (short explaination of what this document/contract is about)",
                 "clauses": [
                     {
                     "title": "string (clause heading or generated short title)",
-                    "explanation": "string (business-friendly explanation of what this clause means in practice)",
+                    "explanation": "string (business-friendly explanation and summary of what this clause means in practice)",
                     "risk": "string (compliance, legal, or operational risk — if none, return 'N/A')",
                     "improvement": "string (actionable recommendation or negotiation tip — if none, return 'N/A')"
                     }
@@ -192,6 +185,7 @@ const agreementSummary = asyncHandler(async (req: Request, res: Response) => {
                 Guidelines:
                 - Only include as many clauses as actually exist; do not invent extras.
                 - If a clause has no specific risk, set "risk": "N/A".
+                - "about" must be a longer explanation in simple language.
                 - If no improvement is needed, set "improvement": "N/A".
                 - Keep explanations concise but clear for a business founder.
                 - Use Indian legal and business context (Companies Act, LLP Act, GST, IT Act, DPDP Act, Arbitration & Conciliation Act, FSSAI, RTE, etc.).
